@@ -10,6 +10,10 @@
 package openapi
 // ApiKeyResponse struct for ApiKeyResponse
 type ApiKeyResponse struct {
-	Result string `json:"result"`
-	Msg string `json:"msg"`
+	Result map[string]interface{} `json:"result"`
+	Msg map[string]interface{} `json:"msg"`
+	// The API key that can be used to authenticate as the requested user. 
+	ApiKey string `json:"api_key"`
+	// The email address of the user who owns the API key 
+	Email string `json:"email"`
 }

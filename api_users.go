@@ -34,17 +34,16 @@ CreateUser Method for CreateUser
  * @param email The email address of the new user. 
  * @param password The password of the new user. 
  * @param fullName The full name of the new user. 
- * @param shortName The short name of the new user.  Not user-visible. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *UsersApiService) CreateUser(ctx _context.Context, email string, password string, fullName string, shortName string) (JsonSuccess, *_nethttp.Response, error) {
+func (a *UsersApiService) CreateUser(ctx _context.Context, email string, password string, fullName string) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -56,7 +55,6 @@ func (a *UsersApiService) CreateUser(ctx _context.Context, email string, passwor
 	localVarQueryParams.Add("email", parameterToString(email, ""))
 	localVarQueryParams.Add("password", parameterToString(password, ""))
 	localVarQueryParams.Add("full_name", parameterToString(fullName, ""))
-	localVarQueryParams.Add("short_name", parameterToString(shortName, ""))
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -96,7 +94,7 @@ func (a *UsersApiService) CreateUser(ctx _context.Context, email string, passwor
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -434,16 +432,16 @@ func (a *UsersApiService) DeactivateUser(ctx _context.Context, userId int32) (Js
 GetAttachments Method for GetAttachments
 Fetch metadata on files uploaded by the requesting user.  &#x60;GET {{ api_url }}/v1/attachments&#x60; 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *UsersApiService) GetAttachments(ctx _context.Context) (JsonSuccess, *_nethttp.Response, error) {
+func (a *UsersApiService) GetAttachments(ctx _context.Context) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -491,7 +489,7 @@ func (a *UsersApiService) GetAttachments(ctx _context.Context) (JsonSuccess, *_n
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -518,16 +516,16 @@ func (a *UsersApiService) GetAttachments(ctx _context.Context) (JsonSuccess, *_n
 GetOwnUser Method for GetOwnUser
 Get basic data about the user/bot that requests this endpoint.  &#x60;GET {{ api_url }}/v1/users/me&#x60; 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *UsersApiService) GetOwnUser(ctx _context.Context) (JsonSuccess, *_nethttp.Response, error) {
+func (a *UsersApiService) GetOwnUser(ctx _context.Context) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -575,7 +573,7 @@ func (a *UsersApiService) GetOwnUser(ctx _context.Context) (JsonSuccess, *_netht
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -612,16 +610,16 @@ Fetch details for a single user in the organization.  &#x60;GET {{ api_url }}/v1
  * @param optional nil or *GetUserOpts - Optional Parameters:
  * @param "ClientGravatar" (optional.Bool) -  Whether the client supports computing gravatars URLs.  If enabled, `avatar_url` will be included in the response only if there is a Zulip avatar, and will be `null` for users who are using gravatar as their avatar.  This option significantly reduces the compressed size of user data, since gravatar URLs are long, random strings and thus do not compress well. The `client_gravatar` field is set to `true` if clients can compute their own gravatars. 
  * @param "IncludeCustomProfileFields" (optional.Bool) -  Whether the client wants [custom profile field](/help/add-custom-profile-fields) data to be included in the response.  **Changes**: New in Zulip 2.1.0.  Previous versions do no offer these data via the API. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *UsersApiService) GetUser(ctx _context.Context, userId int32, localVarOptionals *GetUserOpts) (JsonSuccess, *_nethttp.Response, error) {
+func (a *UsersApiService) GetUser(ctx _context.Context, userId int32, localVarOptionals *GetUserOpts) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -677,7 +675,7 @@ func (a *UsersApiService) GetUser(ctx _context.Context, userId int32, localVarOp
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -704,16 +702,16 @@ func (a *UsersApiService) GetUser(ctx _context.Context, userId int32, localVarOp
 GetUserGroups Method for GetUserGroups
 Fetches all of the user groups in the organization.  &#x60;GET {{ api_url }}/v1/user_groups&#x60; 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *UsersApiService) GetUserGroups(ctx _context.Context) (JsonSuccess, *_nethttp.Response, error) {
+func (a *UsersApiService) GetUserGroups(ctx _context.Context) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -761,7 +759,7 @@ func (a *UsersApiService) GetUserGroups(ctx _context.Context) (JsonSuccess, *_ne
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -789,16 +787,16 @@ GetUserPresence Method for GetUserPresence
 Get the presence status for a specific user.  This endpoint is most useful for embedding data about a user&#39;s presence status in other sites (E.g. an employee directory).  Full Zulip clients like mobile/desktop apps will want to use the main presence endpoint, which returns data for all active users in the organization, instead.  &#x60;GET {{ api_url }}/v1/users/{email}/presence&#x60;  See [Zulip&#39;s developer documentation](https://zulip.readthedocs.io/en/latest/subsystems/presence.html) for details on the data model for presence in Zulip. 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param email The email address of the user whose presence you want to fetch. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *UsersApiService) GetUserPresence(ctx _context.Context, email string) (JsonSuccess, *_nethttp.Response, error) {
+func (a *UsersApiService) GetUserPresence(ctx _context.Context, email string) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -848,7 +846,7 @@ func (a *UsersApiService) GetUserPresence(ctx _context.Context, email string) (J
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -884,16 +882,16 @@ Retrieve details on all users in the organization.  Optionally includes values o
  * @param optional nil or *GetUsersOpts - Optional Parameters:
  * @param "ClientGravatar" (optional.Bool) -  Whether the client supports computing gravatars URLs.  If enabled, `avatar_url` will be included in the response only if there is a Zulip avatar, and will be `null` for users who are using gravatar as their avatar.  This option significantly reduces the compressed size of user data, since gravatar URLs are long, random strings and thus do not compress well. The `client_gravatar` field is set to `true` if clients can compute their own gravatars. 
  * @param "IncludeCustomProfileFields" (optional.Bool) -  Whether the client wants [custom profile field](/help/add-custom-profile-fields) data to be included in the response.  **Changes**: New in Zulip 2.1.0.  Previous versions do no offer these data via the API. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *UsersApiService) GetUsers(ctx _context.Context, localVarOptionals *GetUsersOpts) (JsonSuccess, *_nethttp.Response, error) {
+func (a *UsersApiService) GetUsers(ctx _context.Context, localVarOptionals *GetUsersOpts) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -947,7 +945,7 @@ func (a *UsersApiService) GetUsers(ctx _context.Context, localVarOptionals *GetU
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -1059,12 +1057,12 @@ func (a *UsersApiService) ReactivateUser(ctx _context.Context, userId int32) (Js
 
 /*
 RemoveUserGroup Method for RemoveUserGroup
-Delete a [user group](/help/user-groups).  &#x60;DELETE {{ api_url }}/v1/user_groups/{group_id}&#x60; 
+Delete a [user group](/help/user-groups).  &#x60;DELETE {{ api_url }}/v1/user_groups/{user_group_id}&#x60; 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param groupId The ID of the target user group. 
+ * @param userGroupId The ID of the target user group. 
 @return JsonSuccess
 */
-func (a *UsersApiService) RemoveUserGroup(ctx _context.Context, groupId int32) (JsonSuccess, *_nethttp.Response, error) {
+func (a *UsersApiService) RemoveUserGroup(ctx _context.Context, userGroupId int32) (JsonSuccess, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodDelete
 		localVarPostBody     interface{}
@@ -1075,8 +1073,8 @@ func (a *UsersApiService) RemoveUserGroup(ctx _context.Context, groupId int32) (
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/user_groups/{group_id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"group_id"+"}", _neturl.QueryEscape(parameterToString(groupId, "")) , -1)
+	localVarPath := a.client.cfg.BasePath + "/user_groups/{user_group_id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"user_group_id"+"}", _neturl.QueryEscape(parameterToString(userGroupId, "")) , -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -1156,10 +1154,10 @@ func (a *UsersApiService) RemoveUserGroup(ctx _context.Context, groupId int32) (
 
 /*
 SetTypingStatus Method for SetTypingStatus
-Send an event indicating that the user has started or stopped typing on their client.  See [the typing notification docs](https://zulip.readthedocs.io/en/latest/subsystems/typing-indicators.html) for details on Zulip&#39;s typing notifications protocol.  &#x60;POST {{ api_url }}/v1/typing&#x60; 
+Notify other users whether the current user is typing a message.  &#x60;POST {{ api_url }}/v1/typing&#x60;  Clients implementing Zulip&#39;s typing notifications protocol should work as follows:  * Send a request to this endpoint with &#x60;op&#x3D;\&quot;start\&quot;&#x60; when a user starts typing   a private message or group private message, and also every   &#x60;TYPING_STARTED_WAIT_PERIOD&#x3D;10&#x60; seconds that the user continues to actively type   or otherwise interact with the compose UI (E.g. interacting with the compose box   emoji picker). * Send a request to this endpoint with &#x60;op&#x3D;\&quot;stop\&quot;&#x60; when a user pauses using the   compose UI for at least &#x60;TYPING_STOPPED_WAIT_PERIOD&#x3D;5&#x60; seconds or cancels   the compose action (if it had previously sent a \&quot;start\&quot; operation for that   compose action). * Start displaying \&quot;Sender is typing\&quot; for a given conversation when the client   receives an &#x60;op&#x3D;\&quot;start\&quot;&#x60; event from the [events API](/api/get-events). * Continue displaying \&quot;Sender is typing\&quot; until they receive an &#x60;op&#x3D;\&quot;stop\&quot;&#x60; event   from the [events API](/api/get-events) or &#x60;TYPING_STARTED_EXPIRY_PERIOD&#x3D;15&#x60;   seconds have passed without a new &#x60;op&#x3D;\&quot;start\&quot;&#x60; event for that conversation.  This protocol is designed to allow the server-side typing notifications implementation to be stateless while being resilient; network failures cannot result in a user being incorrectly displayed as perpetually typing.  See [the typing notification docs](https://zulip.readthedocs.io/en/latest/subsystems/typing-indicators.html) for additional design details on Zulip&#39;s typing notifications protocol. 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param op Whether the user has started (`start`) or stopped (`stop`) to type. 
- * @param to The user_ids of the recipients of the message being typed. Typing notifications are only supported for private messages. Send a JSON-encoded list of user_ids. (Use a list even if there is only one recipient.).  **Changes**: Before Zulip 2.0, this parameter accepted only a JSON-encoded list of email addresses.  Support for the email address-based format was removed in Zulip 3.0 (feature level 11). 
+ * @param to The user_ids of the recipients of the message being typed. Typing notifications are only supported for private messages. Send a JSON-encoded list of user_ids. (Use a list even if there is only one recipient.)  **Changes**: Before Zulip 2.0, this parameter accepted only a JSON-encoded list of email addresses.  Support for the email address-based format was removed in Zulip 3.0 (feature level 11). 
 @return JsonSuccess
 */
 func (a *UsersApiService) SetTypingStatus(ctx _context.Context, op string, to []int32) (JsonSuccess, *_nethttp.Response, error) {
@@ -1297,16 +1295,16 @@ This endpoint is used to edit the user&#39;s global notification settings. See [
  * @param "DesktopIconCountDisplay" (optional.Int32) -  Unread count summary (appears in desktop sidebar and browser tab)  * 1 - All unreads * 2 - Private messages and mentions * 3 - None 
  * @param "RealmNameInNotifications" (optional.Bool) -  Include organization name in subject of missed message emails. 
  * @param "PresenceEnabled" (optional.Bool) -  Display the presence status to other users when online. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *UsersApiService) UpdateNotificationSettings(ctx _context.Context, localVarOptionals *UpdateNotificationSettingsOpts) (JsonSuccess, *_nethttp.Response, error) {
+func (a *UsersApiService) UpdateNotificationSettings(ctx _context.Context, localVarOptionals *UpdateNotificationSettingsOpts) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPatch
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -1408,7 +1406,7 @@ func (a *UsersApiService) UpdateNotificationSettings(ctx _context.Context, local
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -1558,14 +1556,14 @@ func (a *UsersApiService) UpdateUser(ctx _context.Context, userId int32, localVa
 
 /*
 UpdateUserGroup Method for UpdateUserGroup
-Update the name or description of a [user group](/help/user-groups).  &#x60;PATCH {{ api_url }}/v1/user_groups/{group_id}&#x60; 
+Update the name or description of a [user group](/help/user-groups).  &#x60;PATCH {{ api_url }}/v1/user_groups/{user_group_id}&#x60; 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param groupId The ID of the target user group. 
+ * @param userGroupId The ID of the target user group. 
  * @param name The new name of the group. 
  * @param description The new description of the group. 
 @return JsonSuccess
 */
-func (a *UsersApiService) UpdateUserGroup(ctx _context.Context, groupId int32, name string, description string) (JsonSuccess, *_nethttp.Response, error) {
+func (a *UsersApiService) UpdateUserGroup(ctx _context.Context, userGroupId int32, name string, description string) (JsonSuccess, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPatch
 		localVarPostBody     interface{}
@@ -1576,8 +1574,8 @@ func (a *UsersApiService) UpdateUserGroup(ctx _context.Context, groupId int32, n
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/user_groups/{group_id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"group_id"+"}", _neturl.QueryEscape(parameterToString(groupId, "")) , -1)
+	localVarPath := a.client.cfg.BasePath + "/user_groups/{user_group_id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"user_group_id"+"}", _neturl.QueryEscape(parameterToString(userGroupId, "")) , -1)
 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
@@ -1635,6 +1633,124 @@ func (a *UsersApiService) UpdateUserGroup(ctx _context.Context, groupId int32, n
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
 			var v JsonError
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+// UpdateUserGroupMembersOpts Optional parameters for the method 'UpdateUserGroupMembers'
+type UpdateUserGroupMembersOpts struct {
+    Delete optional.Interface
+    Add optional.Interface
+}
+
+/*
+UpdateUserGroupMembers Method for UpdateUserGroupMembers
+Update the members of a [user group](/help/user-groups).  &#x60;POST {{ api_url }}/v1/user_groups/{user_group_id}/members&#x60; 
+ * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param userGroupId The ID of the target user group. 
+ * @param optional nil or *UpdateUserGroupMembersOpts - Optional Parameters:
+ * @param "Delete" (optional.Interface of []int32) -  The list of user ids to be removed from the user group. 
+ * @param "Add" (optional.Interface of []int32) -  The list of user ids to be added to the user group. 
+@return JsonSuccess
+*/
+func (a *UsersApiService) UpdateUserGroupMembers(ctx _context.Context, userGroupId int32, localVarOptionals *UpdateUserGroupMembersOpts) (JsonSuccess, *_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodPost
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		localVarReturnValue  JsonSuccess
+	)
+
+	// create path and map variables
+	localVarPath := a.client.cfg.BasePath + "/user_groups/{user_group_id}/members"
+	localVarPath = strings.Replace(localVarPath, "{"+"user_group_id"+"}", _neturl.QueryEscape(parameterToString(userGroupId, "")) , -1)
+
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	if localVarOptionals != nil && localVarOptionals.Delete.IsSet() {
+		t:=localVarOptionals.Delete.Value()
+		if reflect.TypeOf(t).Kind() == reflect.Slice {
+			s := reflect.ValueOf(t)
+			for i := 0; i < s.Len(); i++ {
+				localVarQueryParams.Add("delete", parameterToString(s.Index(i), "multi"))
+			}
+		} else {
+			localVarQueryParams.Add("delete", parameterToString(t, "multi"))
+		}
+	}
+	if localVarOptionals != nil && localVarOptionals.Add.IsSet() {
+		t:=localVarOptionals.Add.Value()
+		if reflect.TypeOf(t).Kind() == reflect.Slice {
+			s := reflect.ValueOf(t)
+			for i := 0; i < s.Len(); i++ {
+				localVarQueryParams.Add("add", parameterToString(s.Index(i), "multi"))
+			}
+		} else {
+			localVarQueryParams.Add("add", parameterToString(t, "multi"))
+		}
+	}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(r)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 200 {
+			var v JsonSuccess
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()

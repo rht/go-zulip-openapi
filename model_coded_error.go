@@ -10,8 +10,7 @@
 package openapi
 // CodedError struct for CodedError
 type CodedError struct {
-	Result string `json:"result"`
-	Msg string `json:"msg"`
-	// A string that identifies the error. 
-	Code string `json:"code,omitempty"`
+	Result map[string]interface{} `json:"result"`
+	Msg map[string]interface{} `json:"msg"`
+	Code map[string]interface{} `json:"code,omitempty"`
 }

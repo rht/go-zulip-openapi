@@ -30,7 +30,6 @@ type MessagesApiService service
 
 // AddReactionOpts Optional parameters for the method 'AddReaction'
 type AddReactionOpts struct {
-    EmojiName optional.String
     EmojiCode optional.String
     ReactionType optional.String
 }
@@ -40,13 +39,13 @@ AddReaction Method for AddReaction
 Add an [emoji reaction](/help/emoji-reactions) to a message.  &#x60;POST {{ api_url }}/v1/messages/{message_id}/reactions&#x60; 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param messageId The target message's ID. 
+ * @param emojiName The target emoji's human-readable name.  To find an emoji's name, hover over a message to reveal three icons on the right, then click the smiley face icon. Images of available reaction emojis appear. Hover over the emoji you want, and note that emoji's text name. 
  * @param optional nil or *AddReactionOpts - Optional Parameters:
- * @param "EmojiName" (optional.String) -  The target emoji's human-readable name.  To find an emoji's name, hover over a message to reveal three icons on the right, then click the smiley face icon. Images of available reaction emojis appear. Hover over the emoji you want, and note that emoji's text name. 
  * @param "EmojiCode" (optional.String) -  A unique identifier, defining the specific emoji codepoint requested, within the namespace of the `reaction_type`.  For most API clients, you won't need this, but it's important for Zulip apps to handle rare corner cases when adding/removing votes on an emoji reaction added previously by another user.  If the existing reaction was added when the Zulip server was using a previous version of the emoji data mapping between Unicode codepoints and human-readable names, sending the `emoji_code` in the data for the original reaction allows the Zulip server to correctly interpret your upvote as an upvote rather than a reaction with a \"diffenent\" emoji. 
- * @param "ReactionType" (optional.String) -  If an app is adding/removing a vote on an existing reaction, it should pass this parameter using the value the server provided for the existing reaction for specificity.  Supported values:  * `unicode_emoji`: Unicode emoji (`emoji_code` will be its unicode codepoint). * `realm_emoji`: Custom emoji. (`emoji_code` will be its ID). * `zulip_extra_emoji`: Special emoji included with Zulip.  Exists to    namespace the `zulip` emoji.  **Changes**: In Zulip 3.0 (feature level 2), this become optional for [custom emoji](/help/add-custom-emoji); previously, this endpoint assumed `unicode_emoji` if this parameter was not specified. 
+ * @param "ReactionType" (optional.String) -  If an app is adding/removing a vote on an existing reaction, it should pass this parameter using the value the server provided for the existing reaction for specificity.  Supported values:  * `unicode_emoji`: Unicode emoji (`emoji_code` will be its Unicode codepoint). * `realm_emoji`: Custom emoji. (`emoji_code` will be its ID). * `zulip_extra_emoji`: Special emoji included with Zulip.  Exists to    namespace the `zulip` emoji.  **Changes**: In Zulip 3.0 (feature level 2), this become optional for [custom emoji](/help/add-custom-emoji); previously, this endpoint assumed `unicode_emoji` if this parameter was not specified. 
 @return JsonSuccess
 */
-func (a *MessagesApiService) AddReaction(ctx _context.Context, messageId int32, localVarOptionals *AddReactionOpts) (JsonSuccess, *_nethttp.Response, error) {
+func (a *MessagesApiService) AddReaction(ctx _context.Context, messageId int32, emojiName string, localVarOptionals *AddReactionOpts) (JsonSuccess, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
@@ -64,9 +63,7 @@ func (a *MessagesApiService) AddReaction(ctx _context.Context, messageId int32, 
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.EmojiName.IsSet() {
-		localVarQueryParams.Add("emoji_name", parameterToString(localVarOptionals.EmojiName.Value(), ""))
-	}
+	localVarQueryParams.Add("emoji_name", parameterToString(emojiName, ""))
 	if localVarOptionals != nil && localVarOptionals.EmojiCode.IsSet() {
 		localVarQueryParams.Add("emoji_code", parameterToString(localVarOptionals.EmojiCode.Value(), ""))
 	}
@@ -151,16 +148,16 @@ Check whether a set of messages match a [narrow](/api/construct-narrow).  &#x60;
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param msgIds List of IDs for the messages to check.
  * @param narrow A structure defining the narrow to check against. See how to [construct a narrow](/api/construct-narrow).
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *MessagesApiService) CheckMessagesMatchNarrow(ctx _context.Context, msgIds []int32, narrow []map[string]interface{}) (JsonSuccess, *_nethttp.Response, error) {
+func (a *MessagesApiService) CheckMessagesMatchNarrow(ctx _context.Context, msgIds []int32, narrow []map[string]interface{}) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -230,7 +227,7 @@ func (a *MessagesApiService) CheckMessagesMatchNarrow(ctx _context.Context, msgI
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -356,16 +353,16 @@ Get a temporary URL for access to the file that doesn&#39;t require authenticati
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param realmIdStr The realm id. 
  * @param filename Path to the URL. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *MessagesApiService) GetFileTemporaryUrl(ctx _context.Context, realmIdStr int32, filename string) (JsonSuccess, *_nethttp.Response, error) {
+func (a *MessagesApiService) GetFileTemporaryUrl(ctx _context.Context, realmIdStr int32, filename string) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -417,7 +414,7 @@ func (a *MessagesApiService) GetFileTemporaryUrl(ctx _context.Context, realmIdSt
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -445,16 +442,16 @@ GetMessageHistory Method for GetMessageHistory
 Fetch the message edit history of a previously edited message.  &#x60;GET {{ api_url }}/v1/messages/{message_id}/history&#x60;  Note that edit history may be disabled in some organizations; see the [Zulip Help Center documentation on editing messages][edit-settings].  [edit-settings]: /help/view-a-messages-edit-history 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param messageId The target message's ID. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *MessagesApiService) GetMessageHistory(ctx _context.Context, messageId int32) (JsonSuccess, *_nethttp.Response, error) {
+func (a *MessagesApiService) GetMessageHistory(ctx _context.Context, messageId int32) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -504,7 +501,7 @@ func (a *MessagesApiService) GetMessageHistory(ctx _context.Context, messageId i
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -548,7 +545,7 @@ type GetMessagesOpts struct {
 
 /*
 GetMessages Method for GetMessages
-Fetch message history from a Zulip server.  &#x60;GET {{ api_url }}/v1/messages&#x60;  This &#x60;GET /api/v1/messages&#x60; endpoint is the primary way to fetch message history from a Zulip server.  It is useful both for Zulip clients (e.g. the web, desktop, mobile, and terminal clients) as well as bots, API clients, backup scripts, etc.  By specifying a [narrow filter](/api/construct-narrow), you can use this endpoint to fetch the messages matching any search query that is supported by Zulip&#39;s powerful full-text search backend.  When a narrow is not specified, it can be used to fetch a user&#39;s message history (We recommend paginating to 1000 messages at a time).  In either case, you specify an &#x60;anchor&#x60; message (or ask the server to calculate the first unread message for you and use that as the anchor), as well as a number of messages before and after the anchor message.  The server returns those messages, sorted by message ID, as well as some metadata that makes it easy for a client to determine whether there are more messages matching the query that were not returned due to the &#x60;num_before&#x60; and &#x60;num_after&#x60; limits.  We recommend using &#x60;num_before &lt;&#x3D; 1000&#x60; and &#x60;num_after &lt;&#x3D; 1000&#x60; to avoid generating very large HTTP responses. A maximum of 5000 messages can be obtained per request; attempting to exceed this will result in an error. 
+Fetch message history from a Zulip server.  &#x60;GET {{ api_url }}/v1/messages&#x60;  This &#x60;GET /api/v1/messages&#x60; endpoint is the primary way to fetch message history from a Zulip server.  It is useful both for Zulip clients (e.g. the web, desktop, mobile, and terminal clients) as well as bots, API clients, backup scripts, etc.  By specifying a [narrow filter](/api/construct-narrow), you can use this endpoint to fetch the messages matching any search query that is supported by Zulip&#39;s powerful full-text search backend.  When a narrow is not specified, it can be used to fetch a user&#39;s message history. (We recommend paginating to 1000 messages at a time.)  In either case, you specify an &#x60;anchor&#x60; message (or ask the server to calculate the first unread message for you and use that as the anchor), as well as a number of messages before and after the anchor message.  The server returns those messages, sorted by message ID, as well as some metadata that makes it easy for a client to determine whether there are more messages matching the query that were not returned due to the &#x60;num_before&#x60; and &#x60;num_after&#x60; limits.  We recommend using &#x60;num_before &lt;&#x3D; 1000&#x60; and &#x60;num_after &lt;&#x3D; 1000&#x60; to avoid generating very large HTTP responses. A maximum of 5000 messages can be obtained per request; attempting to exceed this will result in an error. 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param numBefore The number of messages with IDs less than the anchor to retrieve. 
  * @param numAfter The number of messages with IDs greater than the anchor to retrieve. 
@@ -556,18 +553,18 @@ Fetch message history from a Zulip server.  &#x60;GET {{ api_url }}/v1/messages&
  * @param "Anchor" (optional.Interface of OneOfstringinteger) -  Integer message ID to anchor fetching of new messages. Supports special string values for when the client wants the server to compute the anchor to use:  * `newest`: The most recent message. * `oldest`: The oldest message. * `first_unread`: The oldest unread message matching the   query, if any; otherwise, the most recent message.  The special values of `'newest'` and `'oldest'` are also supported for anchoring the query at the most recent or oldest messages.  **Changes**: String values are new in Zulip 3.0 (feature level 1).  The   `first_unread` functionality was supported in Zulip 2.1.x   and older by not sending anchor and using use_first_unread_anchor.    In Zulip 2.1.x and older, `oldest` can be emulated with   `anchor=0`, and `newest` with `anchor=10000000000000000`   (that specific large value works around a bug in Zulip   2.1.x and older in the `found_newest` return value). 
  * @param "Narrow" (optional.Interface of []map[string]interface{}) -  The narrow where you want to fetch the messages from. See how to [construct a narrow](/api/construct-narrow). 
  * @param "ClientGravatar" (optional.Bool) -  Whether the client supports computing gravatars URLs.  If enabled, `avatar_url` will be included in the response only if there is a Zulip avatar, and will be `null` for users who are using gravatar as their avatar.  This option significantly reduces the compressed size of user data, since gravatar URLs are long, random strings and thus do not compress well. The `client_gravatar` field is set to `true` if clients can compute their own gravatars. 
- * @param "ApplyMarkdown" (optional.Bool) -  If `true`, message content is returned in the rendered HTML format. If `false`, message content is returned in the raw markdown-format text that user entered. 
+ * @param "ApplyMarkdown" (optional.Bool) -  If `true`, message content is returned in the rendered HTML format. If `false`, message content is returned in the raw Markdown-format text that user entered. 
  * @param "UseFirstUnreadAnchor" (optional.Bool) -  Legacy way to specify `anchor=\"first_unread\"` in Zulip 2.1.x and older.  Whether to use the (computed by the server) first unread message matching the narrow as the `anchor`.  Mutually exclusive with `anchor`.  **Changes**: Deprecated in Zulip 3.0, replaced by `anchor=\"first_unread\"` instead. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *MessagesApiService) GetMessages(ctx _context.Context, numBefore int32, numAfter int32, localVarOptionals *GetMessagesOpts) (JsonSuccess, *_nethttp.Response, error) {
+func (a *MessagesApiService) GetMessages(ctx _context.Context, numBefore int32, numAfter int32, localVarOptionals *GetMessagesOpts) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -575,6 +572,12 @@ func (a *MessagesApiService) GetMessages(ctx _context.Context, numBefore int32, 
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
+	if numBefore < 0 {
+		return localVarReturnValue, nil, reportError("numBefore must be greater than 0")
+	}
+	if numAfter < 0 {
+		return localVarReturnValue, nil, reportError("numAfter must be greater than 0")
+	}
 
 	if localVarOptionals != nil && localVarOptionals.Anchor.IsSet() {
 		localVarQueryParams.Add("anchor", parameterToString(localVarOptionals.Anchor.Value(), ""))
@@ -640,7 +643,7 @@ func (a *MessagesApiService) GetMessages(ctx _context.Context, numBefore int32, 
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -665,19 +668,19 @@ func (a *MessagesApiService) GetMessages(ctx _context.Context, numBefore int32, 
 
 /*
 GetRawMessage Method for GetRawMessage
-Get the raw content of a message.  &#x60;GET {{ api_url }}/v1/messages/{msg_id}&#x60;  This is a rarely-used endpoint relevant for clients that primarily work with HTML-rendered messages but might need to occasionally fetch the message&#39;s raw markdown (e.g. for pre-filling a message-editing UI). 
+Get the raw content of a message.  &#x60;GET {{ api_url }}/v1/messages/{msg_id}&#x60;  This is a rarely-used endpoint relevant for clients that primarily work with HTML-rendered messages but might need to occasionally fetch the message&#39;s raw Markdown (e.g. for pre-filling a message-editing UI). 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param messageId The target message's ID. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *MessagesApiService) GetRawMessage(ctx _context.Context, messageId int32) (JsonSuccess, *_nethttp.Response, error) {
+func (a *MessagesApiService) GetRawMessage(ctx _context.Context, messageId int32) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -727,7 +730,7 @@ func (a *MessagesApiService) GetRawMessage(ctx _context.Context, messageId int32
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -844,20 +847,14 @@ func (a *MessagesApiService) MarkAllAsRead(ctx _context.Context) (JsonSuccess, *
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-// MarkStreamAsReadOpts Optional parameters for the method 'MarkStreamAsRead'
-type MarkStreamAsReadOpts struct {
-    StreamId optional.Int32
-}
-
 /*
 MarkStreamAsRead Method for MarkStreamAsRead
 Mark all the unread messages in a stream as read. 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param optional nil or *MarkStreamAsReadOpts - Optional Parameters:
- * @param "StreamId" (optional.Int32) -  The ID of the stream to access. 
+ * @param streamId The ID of the stream to access. 
 @return JsonSuccess
 */
-func (a *MessagesApiService) MarkStreamAsRead(ctx _context.Context, localVarOptionals *MarkStreamAsReadOpts) (JsonSuccess, *_nethttp.Response, error) {
+func (a *MessagesApiService) MarkStreamAsRead(ctx _context.Context, streamId int32) (JsonSuccess, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
@@ -873,9 +870,7 @@ func (a *MessagesApiService) MarkStreamAsRead(ctx _context.Context, localVarOpti
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.StreamId.IsSet() {
-		localVarQueryParams.Add("stream_id", parameterToString(localVarOptionals.StreamId.Value(), ""))
-	}
+	localVarQueryParams.Add("stream_id", parameterToString(streamId, ""))
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -938,21 +933,15 @@ func (a *MessagesApiService) MarkStreamAsRead(ctx _context.Context, localVarOpti
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-// MarkTopicAsReadOpts Optional parameters for the method 'MarkTopicAsRead'
-type MarkTopicAsReadOpts struct {
-    StreamId optional.Int32
-}
-
 /*
 MarkTopicAsRead Method for MarkTopicAsRead
 Mark all the unread messages in a topic as read. 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param streamId The ID of the stream to access. 
  * @param topicName The name of the topic whose messages should be marked as read. 
- * @param optional nil or *MarkTopicAsReadOpts - Optional Parameters:
- * @param "StreamId" (optional.Int32) -  The ID of the stream to access. 
 @return JsonSuccess
 */
-func (a *MessagesApiService) MarkTopicAsRead(ctx _context.Context, topicName string, localVarOptionals *MarkTopicAsReadOpts) (JsonSuccess, *_nethttp.Response, error) {
+func (a *MessagesApiService) MarkTopicAsRead(ctx _context.Context, streamId int32, topicName string) (JsonSuccess, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
@@ -968,9 +957,7 @@ func (a *MessagesApiService) MarkTopicAsRead(ctx _context.Context, topicName str
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.StreamId.IsSet() {
-		localVarQueryParams.Add("stream_id", parameterToString(localVarOptionals.StreamId.Value(), ""))
-	}
+	localVarQueryParams.Add("stream_id", parameterToString(streamId, ""))
 	localVarQueryParams.Add("topic_name", parameterToString(topicName, ""))
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
@@ -1049,7 +1036,7 @@ Remove an [emoji reaction](/help/emoji-reactions) from a message.  &#x60;DELETE 
  * @param optional nil or *RemoveReactionOpts - Optional Parameters:
  * @param "EmojiName" (optional.String) -  The target emoji's human-readable name.  To find an emoji's name, hover over a message to reveal three icons on the right, then click the smiley face icon. Images of available reaction emojis appear. Hover over the emoji you want, and note that emoji's text name. 
  * @param "EmojiCode" (optional.String) -  A unique identifier, defining the specific emoji codepoint requested, within the namespace of the `reaction_type`.  For most API clients, you won't need this, but it's important for Zulip apps to handle rare corner cases when adding/removing votes on an emoji reaction added previously by another user.  If the existing reaction was added when the Zulip server was using a previous version of the emoji data mapping between Unicode codepoints and human-readable names, sending the `emoji_code` in the data for the original reaction allows the Zulip server to correctly interpret your upvote as an upvote rather than a reaction with a \"diffenent\" emoji. 
- * @param "ReactionType" (optional.String) -  If an app is adding/removing a vote on an existing reaction, it should pass this parameter using the value the server provided for the existing reaction for specificity.  Supported values:  * `unicode_emoji`: Unicode emoji (`emoji_code` will be its unicode codepoint). * `realm_emoji`: Custom emoji. (`emoji_code` will be its ID). * `zulip_extra_emoji`: Special emoji included with Zulip.  Exists to    namespace the `zulip` emoji.  **Changes**: In Zulip 3.0 (feature level 2), this become optional for [custom emoji](/help/add-custom-emoji); previously, this endpoint assumed `unicode_emoji` if this parameter was not specified. 
+ * @param "ReactionType" (optional.String) -  If an app is adding/removing a vote on an existing reaction, it should pass this parameter using the value the server provided for the existing reaction for specificity.  Supported values:  * `unicode_emoji`: Unicode emoji (`emoji_code` will be its Unicode codepoint). * `realm_emoji`: Custom emoji. (`emoji_code` will be its ID). * `zulip_extra_emoji`: Special emoji included with Zulip.  Exists to    namespace the `zulip` emoji.  **Changes**: In Zulip 3.0 (feature level 2), this become optional for [custom emoji](/help/add-custom-emoji); previously, this endpoint assumed `unicode_emoji` if this parameter was not specified. 
 @return JsonSuccess
 */
 func (a *MessagesApiService) RemoveReaction(ctx _context.Context, messageId int32, localVarOptionals *RemoveReactionOpts) (JsonSuccess, *_nethttp.Response, error) {
@@ -1156,16 +1143,16 @@ RenderMessage Method for RenderMessage
 Render a message to HTML.  &#x60;POST {{ api_url }}/v1/messages/render&#x60; 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param content The content of the message. Maximum message size of 10000 bytes. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *MessagesApiService) RenderMessage(ctx _context.Context, content string) (JsonSuccess, *_nethttp.Response, error) {
+func (a *MessagesApiService) RenderMessage(ctx _context.Context, content string) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -1214,7 +1201,7 @@ func (a *MessagesApiService) RenderMessage(ctx _context.Context, content string)
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -1255,16 +1242,16 @@ Send a stream or a private message.  &#x60;POST {{ api_url }}/v1/messages&#x60;
  * @param "Topic" (optional.String) -  The topic of the message. Only required for stream messages (`type=\"stream\"`), ignored otherwise.  Maximum length of 60 characters.  **Changes**: New in Zulip 2.0.  Previous Zulip releases encoded this as `subject`, which is currently a deprecated alias. 
  * @param "QueueId" (optional.String) -  For clients supporting [local echo](https://zulip.readthedocs.io/en/latest/subsystems/sending-messages.html#local-echo), the [event queue](/api/register-queue) ID for the client.  If passed, `local_id` is required.  If the message is successfully sent, the server will include `local_id` in the `message` event that the client with this `queue_id` will receive notifying it of the new message via [`GET /events`](/api/get-events).  This lets the client know unambiguously that it should replace the locally echoed message, rather than adding this new message (which would be correct if the user had sent the new message from another device). 
  * @param "LocalId" (optional.String) -  For clients supporting local echo, a unique string-format identifier chosen freely by the client; the server will pass it back to the client without inspecting it, as described in the `queue_id` description. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *MessagesApiService) SendMessage(ctx _context.Context, type_ string, to []int32, content string, localVarOptionals *SendMessageOpts) (JsonSuccess, *_nethttp.Response, error) {
+func (a *MessagesApiService) SendMessage(ctx _context.Context, type_ string, to []int32, content string, localVarOptionals *SendMessageOpts) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -1334,7 +1321,7 @@ func (a *MessagesApiService) SendMessage(ctx _context.Context, type_ string, to 
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -1373,6 +1360,7 @@ type UpdateMessageOpts struct {
     PropagateMode optional.String
     SendNotificationToOldThread optional.Bool
     SendNotificationToNewThread optional.Bool
+    Content optional.String
     StreamId optional.Int32
 }
 
@@ -1381,16 +1369,16 @@ UpdateMessage Method for UpdateMessage
 Edit/update the content or topic of a message.  &#x60;PATCH {{ api_url }}/v1/messages/{msg_id}&#x60;  &#x60;{msg_id}&#x60; in the above URL should be replaced with the ID of the message you wish you update. 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param messageId The target message's ID. 
- * @param content The content of the message. Maximum message size of 10000 bytes. 
  * @param optional nil or *UpdateMessageOpts - Optional Parameters:
  * @param "Topic" (optional.String) -  The topic of the message. Only required for stream messages (`type=\"stream\"`), ignored otherwise.  Maximum length of 60 characters.  **Changes**: New in Zulip 2.0.  Previous Zulip releases encoded this as `subject`, which is currently a deprecated alias. 
  * @param "PropagateMode" (optional.String) -  Which message(s) should be edited: just the one indicated in `message_id`, messages in the same topic that had been sent after this one, or all of them. 
  * @param "SendNotificationToOldThread" (optional.Bool) -  Whether to send breadcrumb message to the old thread to notify users where the messages were moved to.  **Changes**: New in Zulip 3.0 (feature level 9). 
  * @param "SendNotificationToNewThread" (optional.Bool) -  Whether to send a notification message to the new thread to notify users where the messages came from.  **Changes**: New in Zulip 3.0 (feature level 9). 
+ * @param "Content" (optional.String) -  The content of the message. Maximum message size of 10000 bytes. 
  * @param "StreamId" (optional.Int32) -  The ID of the stream to access. 
 @return JsonSuccess
 */
-func (a *MessagesApiService) UpdateMessage(ctx _context.Context, messageId int32, content string, localVarOptionals *UpdateMessageOpts) (JsonSuccess, *_nethttp.Response, error) {
+func (a *MessagesApiService) UpdateMessage(ctx _context.Context, messageId int32, localVarOptionals *UpdateMessageOpts) (JsonSuccess, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPatch
 		localVarPostBody     interface{}
@@ -1420,7 +1408,9 @@ func (a *MessagesApiService) UpdateMessage(ctx _context.Context, messageId int32
 	if localVarOptionals != nil && localVarOptionals.SendNotificationToNewThread.IsSet() {
 		localVarQueryParams.Add("send_notification_to_new_thread", parameterToString(localVarOptionals.SendNotificationToNewThread.Value(), ""))
 	}
-	localVarQueryParams.Add("content", parameterToString(content, ""))
+	if localVarOptionals != nil && localVarOptionals.Content.IsSet() {
+		localVarQueryParams.Add("content", parameterToString(localVarOptionals.Content.Value(), ""))
+	}
 	if localVarOptionals != nil && localVarOptionals.StreamId.IsSet() {
 		localVarQueryParams.Add("stream_id", parameterToString(localVarOptionals.StreamId.Value(), ""))
 	}
@@ -1503,16 +1493,16 @@ Add or remove personal message flags like &#x60;read&#x60; and &#x60;starred&#x6
  * @param messages An array containing the IDs of the target messages. 
  * @param op Whether to `add` the flag or `remove` it. 
  * @param flag The flag that should be added/removed. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *MessagesApiService) UpdateMessageFlags(ctx _context.Context, messages []int32, op string, flag string) (JsonSuccess, *_nethttp.Response, error) {
+func (a *MessagesApiService) UpdateMessageFlags(ctx _context.Context, messages []int32, op string, flag string) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -1573,7 +1563,7 @@ func (a *MessagesApiService) UpdateMessageFlags(ctx _context.Context, messages [
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -1607,16 +1597,16 @@ Upload a single file and get the corresponding URI.  &#x60;POST {{ api_url }}/v1
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param optional nil or *UploadFileOpts - Optional Parameters:
  * @param "Filename" (optional.Interface of *os.File) - 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *MessagesApiService) UploadFile(ctx _context.Context, localVarOptionals *UploadFileOpts) (JsonSuccess, *_nethttp.Response, error) {
+func (a *MessagesApiService) UploadFile(ctx _context.Context, localVarOptionals *UploadFileOpts) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -1679,7 +1669,7 @@ func (a *MessagesApiService) UploadFile(ctx _context.Context, localVarOptionals 
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()

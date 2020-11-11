@@ -15,8 +15,9 @@ import (
 	_nethttp "net/http"
 	_neturl "net/url"
 	"strings"
-	"os"
 	"github.com/antihax/optional"
+	"reflect"
+	"os"
 )
 
 // Linger please
@@ -33,16 +34,16 @@ Configure [linkifiers](/help/add-a-custom-linkification-filter), regular express
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param pattern The [Python regular expression](https://docs.python.org/3/howto/regex.html) that should trigger the linkifier. 
  * @param urlFormatString The URL used for the link. If you used named groups for the `pattern`, you can insert their content here with `%(name_of_the_capturing_group)s`. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *ServerAndOrganizationsApiService) AddLinkifier(ctx _context.Context, pattern string, urlFormatString string) (JsonSuccess, *_nethttp.Response, error) {
+func (a *ServerAndOrganizationsApiService) AddLinkifier(ctx _context.Context, pattern string, urlFormatString string) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -92,7 +93,113 @@ func (a *ServerAndOrganizationsApiService) AddLinkifier(ctx _context.Context, pa
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+// CreateCustomProfileFieldOpts Optional parameters for the method 'CreateCustomProfileField'
+type CreateCustomProfileFieldOpts struct {
+    Name optional.String
+    Hint optional.String
+    FieldData optional.Interface
+}
+
+/*
+CreateCustomProfileField Method for CreateCustomProfileField
+{!api-admin-only.md!}  [Create a custom profile field](/help/add-custom-profile-fields) in the user&#39;s organization.  &#x60;POST {{ api_url }}/v1/realm/profile_fields&#x60; 
+ * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param fieldType The field type can be any of the supported custom profile field types. See the [custom profile fields documentation](/help/add-custom-profile-fields) more details on what each type means.  * **1**: Short text * **2**: Long text * **3**: List of options * **4**: Date picker * **5**: Link * **6**: Person picker * **7**: External account 
+ * @param optional nil or *CreateCustomProfileFieldOpts - Optional Parameters:
+ * @param "Name" (optional.String) -  The name of the custom profile field, which will appear both in user-facing settings UI for configuring custom profile fields and in UI displaying a user's profile. 
+ * @param "Hint" (optional.String) -  The help text to be displayed for the custom profile field in user-facing settings UI for configuring custom profile fields. 
+ * @param "FieldData" (optional.Interface of map[string]interface{}) -  Field types 3 (List of options) and 7 (External account) support storing additional configuration for the field type in the `field_data` attribute.  For field type 3 (List of options), this attribute is a JSON dictionary defining the choices and the order they will be displayed in the dropdown UI for individual users to select an option.  The interface for field type 7 is not yet stabilized. 
+@return JsonSuccessBase
+*/
+func (a *ServerAndOrganizationsApiService) CreateCustomProfileField(ctx _context.Context, fieldType int32, localVarOptionals *CreateCustomProfileFieldOpts) (JsonSuccessBase, *_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodPost
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		localVarReturnValue  JsonSuccessBase
+	)
+
+	// create path and map variables
+	localVarPath := a.client.cfg.BasePath + "/realm/profile_fields"
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	if localVarOptionals != nil && localVarOptionals.Name.IsSet() {
+		localVarQueryParams.Add("name", parameterToString(localVarOptionals.Name.Value(), ""))
+	}
+	if localVarOptionals != nil && localVarOptionals.Hint.IsSet() {
+		localVarQueryParams.Add("hint", parameterToString(localVarOptionals.Hint.Value(), ""))
+	}
+	localVarQueryParams.Add("field_type", parameterToString(fieldType, ""))
+	if localVarOptionals != nil && localVarOptionals.FieldData.IsSet() {
+		localVarQueryParams.Add("field_data", parameterToString(localVarOptionals.FieldData.Value(), ""))
+	}
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(r)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 200 {
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -119,16 +226,16 @@ func (a *ServerAndOrganizationsApiService) AddLinkifier(ctx _context.Context, pa
 GetCustomEmoji Method for GetCustomEmoji
 Get all the custom emoji in the user&#39;s organization.  &#x60;GET {{ api_url }}/v1/realm/emoji&#x60; 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *ServerAndOrganizationsApiService) GetCustomEmoji(ctx _context.Context) (JsonSuccess, *_nethttp.Response, error) {
+func (a *ServerAndOrganizationsApiService) GetCustomEmoji(ctx _context.Context) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -176,7 +283,91 @@ func (a *ServerAndOrganizationsApiService) GetCustomEmoji(ctx _context.Context) 
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+/*
+GetCustomProfileFields Method for GetCustomProfileFields
+Get all the [custom profile fields](/help/add-custom-profile-fields) configured for the user&#39;s organization.  &#x60;GET {{ api_url }}/v1/realm/profile_fields&#x60; 
+ * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+@return JsonSuccessBase
+*/
+func (a *ServerAndOrganizationsApiService) GetCustomProfileFields(ctx _context.Context) (JsonSuccessBase, *_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		localVarReturnValue  JsonSuccessBase
+	)
+
+	// create path and map variables
+	localVarPath := a.client.cfg.BasePath + "/realm/profile_fields"
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(r)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 200 {
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -203,16 +394,16 @@ func (a *ServerAndOrganizationsApiService) GetCustomEmoji(ctx _context.Context) 
 GetLinkifiers Method for GetLinkifiers
 List all of an organization&#39;s configured [linkifiers](/help/add-a-custom-linkification-filter), regular expression patterns that are automatically linkified when they appear in messages and topics.  &#x60;GET {{ api_url }}/v1/realm/filters&#x60; 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *ServerAndOrganizationsApiService) GetLinkifiers(ctx _context.Context) (JsonSuccess, *_nethttp.Response, error) {
+func (a *ServerAndOrganizationsApiService) GetLinkifiers(ctx _context.Context) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -260,7 +451,7 @@ func (a *ServerAndOrganizationsApiService) GetLinkifiers(ctx _context.Context) (
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -287,11 +478,96 @@ func (a *ServerAndOrganizationsApiService) GetLinkifiers(ctx _context.Context) (
 GetServerSettings Method for GetServerSettings
 Fetch global settings for a Zulip server.  &#x60;GET {{ api_url }}/v1/server_settings&#x60;  **Note:** this endpoint does not require any authentication at all, and you can use it to check:  * If this is a Zulip server, and if so, what version of Zulip it&#39;s running. * What a Zulip client (e.g. a mobile app or [zulip-terminal](https://github.com/zulip/zulip-terminal/)) needs to know in order to display a login prompt for the server (e.g. what authentication methods are available). 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *ServerAndOrganizationsApiService) GetServerSettings(ctx _context.Context) (JsonSuccess, *_nethttp.Response, error) {
+func (a *ServerAndOrganizationsApiService) GetServerSettings(ctx _context.Context) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		localVarReturnValue  JsonSuccessBase
+	)
+
+	// create path and map variables
+	localVarPath := a.client.cfg.BasePath + "/server_settings"
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(r)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		if localVarHTTPResponse.StatusCode == 200 {
+			var v JsonSuccessBase
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.model = v
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+/*
+RemoveLinkifier Method for RemoveLinkifier
+Remove [linkifiers](/help/add-a-custom-linkification-filter), regular expression patterns that are automatically linkified when they appear in messages and topics.  &#x60;DELETE {{ api_url }}/v1/realm/filters/{filter_id}&#x60; 
+ * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param filterId The ID of the filter that you want to remove. 
+@return JsonSuccess
+*/
+func (a *ServerAndOrganizationsApiService) RemoveLinkifier(ctx _context.Context, filterId int32) (JsonSuccess, *_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodDelete
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
@@ -300,7 +576,9 @@ func (a *ServerAndOrganizationsApiService) GetServerSettings(ctx _context.Contex
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/server_settings"
+	localVarPath := a.client.cfg.BasePath + "/realm/filters/{filter_id}"
+	localVarPath = strings.Replace(localVarPath, "{"+"filter_id"+"}", _neturl.QueryEscape(parameterToString(filterId, "")) , -1)
+
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
@@ -368,15 +646,15 @@ func (a *ServerAndOrganizationsApiService) GetServerSettings(ctx _context.Contex
 }
 
 /*
-RemoveLinkifier Method for RemoveLinkifier
-Remove [linkifiers](/help/add-a-custom-linkification-filter), regular expression patterns that are automatically linkified when they appear in messages and topics.  &#x60;DELETE {{ api_url }}/v1/realm/filters/{filter_id}&#x60; 
+ReorderCustomProfileFields Method for ReorderCustomProfileFields
+{!api-admin-only.md!}  Reorder the custom profile fields in the user&#39;s organization.  &#x60;PATCH {{ api_url }}/v1/realm/profile_fields&#x60;  Custom profile fields are displayed in Zulip UI widgets in order; this endpoint allows administrative settings UI to change the field ordering.  This endpoint is used to implement the dragging feature described in the [custom profile fields documentation](/help/add-custom-profile-fields). 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param filterId The ID of the filter that you want to remove. 
+ * @param order A list of the IDs of all the custom profile fields defined in this organization, in the desired new order. 
 @return JsonSuccess
 */
-func (a *ServerAndOrganizationsApiService) RemoveLinkifier(ctx _context.Context, filterId int32) (JsonSuccess, *_nethttp.Response, error) {
+func (a *ServerAndOrganizationsApiService) ReorderCustomProfileFields(ctx _context.Context, order []int32) (JsonSuccess, *_nethttp.Response, error) {
 	var (
-		localVarHTTPMethod   = _nethttp.MethodDelete
+		localVarHTTPMethod   = _nethttp.MethodPatch
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
@@ -385,13 +663,22 @@ func (a *ServerAndOrganizationsApiService) RemoveLinkifier(ctx _context.Context,
 	)
 
 	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/realm/filters/{filter_id}"
-	localVarPath = strings.Replace(localVarPath, "{"+"filter_id"+"}", _neturl.QueryEscape(parameterToString(filterId, "")) , -1)
-
+	localVarPath := a.client.cfg.BasePath + "/realm/profile_fields"
 	localVarHeaderParams := make(map[string]string)
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 
+	{
+		t:=order
+		if reflect.TypeOf(t).Kind() == reflect.Slice {
+			s := reflect.ValueOf(t)
+			for i := 0; i < s.Len(); i++ {
+				localVarQueryParams.Add("order", parameterToString(s.Index(i), "multi"))
+			}
+		} else {
+			localVarQueryParams.Add("order", parameterToString(t, "multi"))
+		}
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 

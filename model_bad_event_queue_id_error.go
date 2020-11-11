@@ -10,10 +10,9 @@
 package openapi
 // BadEventQueueIdError struct for BadEventQueueIdError
 type BadEventQueueIdError struct {
-	Result string `json:"result"`
-	Msg string `json:"msg"`
-	// A string that identifies the error. 
-	Code string `json:"code,omitempty"`
+	Result map[string]interface{} `json:"result"`
+	Msg map[string]interface{} `json:"msg"`
+	Code map[string]interface{} `json:"code,omitempty"`
 	// The string that identifies the invalid event queue. 
 	QueueId string `json:"queue_id,omitempty"`
 }

@@ -5,17 +5,20 @@ All URIs are relative to *https://example.zulipchat.com/api/v1*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**AddLinkifier**](ServerAndOrganizationsApi.md#AddLinkifier) | **Post** /realm/filters | 
+[**CreateCustomProfileField**](ServerAndOrganizationsApi.md#CreateCustomProfileField) | **Post** /realm/profile_fields | 
 [**GetCustomEmoji**](ServerAndOrganizationsApi.md#GetCustomEmoji) | **Get** /realm/emoji | 
+[**GetCustomProfileFields**](ServerAndOrganizationsApi.md#GetCustomProfileFields) | **Get** /realm/profile_fields | 
 [**GetLinkifiers**](ServerAndOrganizationsApi.md#GetLinkifiers) | **Get** /realm/filters | 
 [**GetServerSettings**](ServerAndOrganizationsApi.md#GetServerSettings) | **Get** /server_settings | 
 [**RemoveLinkifier**](ServerAndOrganizationsApi.md#RemoveLinkifier) | **Delete** /realm/filters/{filter_id} | 
+[**ReorderCustomProfileFields**](ServerAndOrganizationsApi.md#ReorderCustomProfileFields) | **Patch** /realm/profile_fields | 
 [**UploadCustomEmoji**](ServerAndOrganizationsApi.md#UploadCustomEmoji) | **Post** /realm/emoji/{emoji_name} | 
 
 
 
 ## AddLinkifier
 
-> JsonSuccess AddLinkifier(ctx, pattern, urlFormatString)
+> JsonSuccessBase AddLinkifier(ctx, pattern, urlFormatString)
 
 
 
@@ -32,7 +35,54 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## CreateCustomProfileField
+
+> JsonSuccessBase CreateCustomProfileField(ctx, fieldType, optional)
+
+
+
+{!api-admin-only.md!}  [Create a custom profile field](/help/add-custom-profile-fields) in the user's organization.  `POST {{ api_url }}/v1/realm/profile_fields` 
+
+### Required Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**fieldType** | **int32**| The field type can be any of the supported custom profile field types. See the [custom profile fields documentation](/help/add-custom-profile-fields) more details on what each type means.  * **1**: Short text * **2**: Long text * **3**: List of options * **4**: Date picker * **5**: Link * **6**: Person picker * **7**: External account  | 
+ **optional** | ***CreateCustomProfileFieldOpts** | optional parameters | nil if no parameters
+
+### Optional Parameters
+
+Optional parameters are passed through a pointer to a CreateCustomProfileFieldOpts struct
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **name** | **optional.String**| The name of the custom profile field, which will appear both in user-facing settings UI for configuring custom profile fields and in UI displaying a user&#39;s profile.  | 
+ **hint** | **optional.String**| The help text to be displayed for the custom profile field in user-facing settings UI for configuring custom profile fields.  | 
+ **fieldData** | [**optional.Interface of map[string]interface{}**](.md)| Field types 3 (List of options) and 7 (External account) support storing additional configuration for the field type in the &#x60;field_data&#x60; attribute.  For field type 3 (List of options), this attribute is a JSON dictionary defining the choices and the order they will be displayed in the dropdown UI for individual users to select an option.  The interface for field type 7 is not yet stabilized.  | 
+
+### Return type
+
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -50,7 +100,7 @@ No authorization required
 
 ## GetCustomEmoji
 
-> JsonSuccess GetCustomEmoji(ctx, )
+> JsonSuccessBase GetCustomEmoji(ctx, )
 
 
 
@@ -62,7 +112,37 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetCustomProfileFields
+
+> JsonSuccessBase GetCustomProfileFields(ctx, )
+
+
+
+Get all the [custom profile fields](/help/add-custom-profile-fields) configured for the user's organization.  `GET {{ api_url }}/v1/realm/profile_fields` 
+
+### Required Parameters
+
+This endpoint does not need any parameter.
+
+### Return type
+
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -80,7 +160,7 @@ No authorization required
 
 ## GetLinkifiers
 
-> JsonSuccess GetLinkifiers(ctx, )
+> JsonSuccessBase GetLinkifiers(ctx, )
 
 
 
@@ -92,7 +172,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -110,7 +190,7 @@ No authorization required
 
 ## GetServerSettings
 
-> JsonSuccess GetServerSettings(ctx, )
+> JsonSuccessBase GetServerSettings(ctx, )
 
 
 
@@ -122,7 +202,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -153,6 +233,40 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
 **filterId** | **int32**| The ID of the filter that you want to remove.  | 
+
+### Return type
+
+[**JsonSuccess**](JsonSuccess.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## ReorderCustomProfileFields
+
+> JsonSuccess ReorderCustomProfileFields(ctx, order)
+
+
+
+{!api-admin-only.md!}  Reorder the custom profile fields in the user's organization.  `PATCH {{ api_url }}/v1/realm/profile_fields`  Custom profile fields are displayed in Zulip UI widgets in order; this endpoint allows administrative settings UI to change the field ordering.  This endpoint is used to implement the dragging feature described in the [custom profile fields documentation](/help/add-custom-profile-fields). 
+
+### Required Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**order** | [**[]int32**](int32.md)| A list of the IDs of all the custom profile fields defined in this organization, in the desired new order.  | 
 
 ### Return type
 

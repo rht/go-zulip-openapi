@@ -48,7 +48,7 @@ No authorization required
 
 ## GetEvents
 
-> JsonSuccess GetEvents(ctx, queueId, optional)
+> JsonSuccessBase GetEvents(ctx, queueId, optional)
 
 
 
@@ -76,7 +76,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -138,7 +138,7 @@ No authorization required
 
 ## RegisterQueue
 
-> JsonSuccess RegisterQueue(ctx, optional)
+> JsonSuccessBase RegisterQueue(ctx, optional)
 
 
 
@@ -171,7 +171,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 

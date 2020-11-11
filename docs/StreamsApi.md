@@ -22,11 +22,11 @@ Method | HTTP request | Description
 
 ## CreateBigBlueButtonVideoCall
 
-> JsonSuccess CreateBigBlueButtonVideoCall(ctx, )
+> JsonSuccessBase CreateBigBlueButtonVideoCall(ctx, )
 
 
 
-Create a video call url for a Big Blue Button video call. Requires Big Blue Button to be configured on the Zulip server. 
+Create a video call URL for a Big Blue Button video call. Requires Big Blue Button to be configured on the Zulip server. 
 
 ### Required Parameters
 
@@ -34,7 +34,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -86,7 +86,7 @@ No authorization required
 
 ## GetStreamId
 
-> JsonSuccess GetStreamId(ctx, optional)
+> JsonSuccessBase GetStreamId(ctx, stream)
 
 
 
@@ -98,20 +98,11 @@ Get the unique ID of a given stream.  `GET {{ api_url }}/v1/get_stream_id`
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
- **optional** | ***GetStreamIdOpts** | optional parameters | nil if no parameters
-
-### Optional Parameters
-
-Optional parameters are passed through a pointer to a GetStreamIdOpts struct
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **stream** | **optional.String**| The name of the stream to access.  | 
+**stream** | **string**| The name of the stream to access.  | 
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -129,7 +120,7 @@ No authorization required
 
 ## GetStreamTopics
 
-> JsonSuccess GetStreamTopics(ctx, streamId)
+> JsonSuccessBase GetStreamTopics(ctx, streamId)
 
 
 
@@ -145,7 +136,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -163,7 +154,7 @@ No authorization required
 
 ## GetStreams
 
-> JsonSuccess GetStreams(ctx, optional)
+> JsonSuccessBase GetStreams(ctx, optional)
 
 
 
@@ -185,6 +176,7 @@ Optional parameters are passed through a pointer to a GetStreamsOpts struct
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **includePublic** | **optional.Bool**| Include all public streams.  | [default to true]
+ **includeWebPublic** | **optional.Bool**| Include all web public streams.  | [default to false]
  **includeSubscribed** | **optional.Bool**| Include all streams that the user is subscribed to.  | [default to true]
  **includeAllActive** | **optional.Bool**| Include all active streams. The user must have administrative privileges to use this parameter.  | [default to false]
  **includeDefault** | **optional.Bool**| Include all default streams for the user&#39;s realm.  | [default to false]
@@ -192,7 +184,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -210,7 +202,7 @@ No authorization required
 
 ## GetSubscriptionStatus
 
-> JsonSuccess GetSubscriptionStatus(ctx, userId, streamId)
+> JsonSuccessBase GetSubscriptionStatus(ctx, userId, streamId)
 
 
 
@@ -227,7 +219,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -245,7 +237,7 @@ No authorization required
 
 ## GetSubscriptions
 
-> JsonSuccess GetSubscriptions(ctx, optional)
+> JsonSuccessBase GetSubscriptions(ctx, optional)
 
 
 
@@ -270,7 +262,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -348,7 +340,7 @@ Subscribe one or more users to one or more streams.  `POST {{ api_url }}/v1/user
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**subscriptions** | [**[]map[string]interface{}**](map[string]interface{}.md)| A list of dictionaries containing the the key &#x60;name&#x60; and value specifying the name of the stream to subscribe. If the stream does not exist a new stream is created. The description of the stream created can be specified by setting the dictionary key &#x60;description&#x60; with an appropriate value.  | 
+**subscriptions** | [**[]map[string]interface{}**](map[string]interface{}.md)| A list of dictionaries containing the key &#x60;name&#x60; and value specifying the name of the stream to subscribe. If the stream does not exist a new stream is created. The description of the stream created can be specified by setting the dictionary key &#x60;description&#x60; with an appropriate value.  | 
  **optional** | ***SubscribeOpts** | optional parameters | nil if no parameters
 
 ### Optional Parameters
@@ -359,7 +351,7 @@ Optional parameters are passed through a pointer to a SubscribeOpts struct
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **principals** | [**optional.Interface of []OneOfstringinteger**](OneOfstringinteger.md)| A list of user ids (preferred) or Zulip display email addresses of the users to be subscribed to or unsubscribed from the streams specified in the &#x60;subscriptions&#x60; parameter. If not provided, then the requesting user/bot is subscribed.  **Changes**: The integer format is new in Zulip 3.0 (Feature level 9).  | 
+ **principals** | [**optional.Interface of []OneOfstringinteger**](OneOfstringinteger.md)| A list of user ids (preferred) or Zulip display email addresses of the users to be subscribed to or unsubscribed from the streams specified in the &#x60;subscriptions&#x60; parameter. If not provided, then the requesting user/bot is subscribed.  **Changes**: The integer format is new in Zulip 3.0 (feature level 9).  | 
  **authorizationErrorsFatal** | **optional.Bool**| A boolean specifying whether authorization errors (such as when the requesting user is not authorized to access a private stream) should be considered fatal or not. When &#x60;True&#x60;, an authorization error is reported as such. When set to &#x60;False&#x60;, the response will be a 200 and any streams where the request encountered an authorization error will be listed in the &#x60;unauthorized&#x60; key.  | [default to true]
  **announce** | **optional.Bool**| If one of the streams specified did not exist previously and is thus craeted by this call, this determines whether [notification bot](/help/configure-notification-bot) will send an announcement about the new stream&#39;s creation.  | [default to false]
  **inviteOnly** | **optional.Bool**| As described above, this endpoint will create a new stream if passed a stream name that doesn&#39;t already exist.  This parameters and the ones that follow are used to request an initial configuration of a created stream; they are ignored for streams that already exist.  This parameter determines whether any newly created streams will be private streams.  | [default to false]
@@ -387,7 +379,7 @@ No authorization required
 
 ## Unsubscribe
 
-> JsonSuccess Unsubscribe(ctx, subscriptions, optional)
+> JsonSuccessBase Unsubscribe(ctx, subscriptions, optional)
 
 
 
@@ -410,11 +402,11 @@ Optional parameters are passed through a pointer to a UnsubscribeOpts struct
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **principals** | [**optional.Interface of []OneOfstringinteger**](OneOfstringinteger.md)| A list of user ids (preferred) or Zulip display email addresses of the users to be subscribed to or unsubscribed from the streams specified in the &#x60;subscriptions&#x60; parameter. If not provided, then the requesting user/bot is subscribed.  **Changes**: The integer format is new in Zulip 3.0 (Feature level 9).  | 
+ **principals** | [**optional.Interface of []OneOfstringinteger**](OneOfstringinteger.md)| A list of user ids (preferred) or Zulip display email addresses of the users to be subscribed to or unsubscribed from the streams specified in the &#x60;subscriptions&#x60; parameter. If not provided, then the requesting user/bot is subscribed.  **Changes**: The integer format is new in Zulip 3.0 (feature level 9).  | 
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -483,7 +475,7 @@ No authorization required
 
 ## UpdateSubscriptionSettings
 
-> JsonSuccess UpdateSubscriptionSettings(ctx, subscriptionData)
+> JsonSuccessBase UpdateSubscriptionSettings(ctx, subscriptionData)
 
 
 
@@ -499,7 +491,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -517,7 +509,7 @@ No authorization required
 
 ## UpdateSubscriptions
 
-> JsonSuccess UpdateSubscriptions(ctx, optional)
+> JsonSuccessBase UpdateSubscriptions(ctx, optional)
 
 
 
@@ -543,7 +535,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 

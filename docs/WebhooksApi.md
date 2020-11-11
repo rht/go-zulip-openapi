@@ -10,11 +10,11 @@ Method | HTTP request | Description
 
 ## ZulipOutgoingWebhooks
 
-> map[string]interface{} ZulipOutgoingWebhooks(ctx, )
+> InlineResponse200 ZulipOutgoingWebhooks(ctx, )
 
 
 
-Outgoing Webhooks allows to build or set up Zulip integrations which are notified when certain types of messages are sent in Zulip. 
+Outgoing webhooks allows to build or set up Zulip integrations which are notified when certain types of messages are sent in Zulip. 
 
 ### Required Parameters
 
@@ -22,7 +22,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**map[string]interface{}**](map[string]interface{}.md)
+[**InlineResponse200**](inline_response_200.md)
 
 ### Authorization
 

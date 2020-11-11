@@ -26,18 +26,18 @@ type WebhooksApiService service
 
 /*
 ZulipOutgoingWebhooks Method for ZulipOutgoingWebhooks
-Outgoing Webhooks allows to build or set up Zulip integrations which are notified when certain types of messages are sent in Zulip. 
+Outgoing webhooks allows to build or set up Zulip integrations which are notified when certain types of messages are sent in Zulip. 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return map[string]interface{}
+@return InlineResponse200
 */
-func (a *WebhooksApiService) ZulipOutgoingWebhooks(ctx _context.Context) (map[string]interface{}, *_nethttp.Response, error) {
+func (a *WebhooksApiService) ZulipOutgoingWebhooks(ctx _context.Context) (InlineResponse200, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  map[string]interface{}
+		localVarReturnValue  InlineResponse200
 	)
 
 	// create path and map variables
@@ -85,7 +85,7 @@ func (a *WebhooksApiService) ZulipOutgoingWebhooks(ctx _context.Context) (map[st
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v map[string]interface{}
+			var v InlineResponse200
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()

@@ -58,10 +58,13 @@ Class | Method | HTTP request | Description
 *RealTimeEventsApi* | [**RegisterQueue**](docs/RealTimeEventsApi.md#registerqueue) | **Post** /register | 
 *RealTimeEventsApi* | [**RestErrorHandling**](docs/RealTimeEventsApi.md#resterrorhandling) | **Post** /rest-error-handling | 
 *ServerAndOrganizationsApi* | [**AddLinkifier**](docs/ServerAndOrganizationsApi.md#addlinkifier) | **Post** /realm/filters | 
+*ServerAndOrganizationsApi* | [**CreateCustomProfileField**](docs/ServerAndOrganizationsApi.md#createcustomprofilefield) | **Post** /realm/profile_fields | 
 *ServerAndOrganizationsApi* | [**GetCustomEmoji**](docs/ServerAndOrganizationsApi.md#getcustomemoji) | **Get** /realm/emoji | 
+*ServerAndOrganizationsApi* | [**GetCustomProfileFields**](docs/ServerAndOrganizationsApi.md#getcustomprofilefields) | **Get** /realm/profile_fields | 
 *ServerAndOrganizationsApi* | [**GetLinkifiers**](docs/ServerAndOrganizationsApi.md#getlinkifiers) | **Get** /realm/filters | 
 *ServerAndOrganizationsApi* | [**GetServerSettings**](docs/ServerAndOrganizationsApi.md#getserversettings) | **Get** /server_settings | 
 *ServerAndOrganizationsApi* | [**RemoveLinkifier**](docs/ServerAndOrganizationsApi.md#removelinkifier) | **Delete** /realm/filters/{filter_id} | 
+*ServerAndOrganizationsApi* | [**ReorderCustomProfileFields**](docs/ServerAndOrganizationsApi.md#reordercustomprofilefields) | **Patch** /realm/profile_fields | 
 *ServerAndOrganizationsApi* | [**UploadCustomEmoji**](docs/ServerAndOrganizationsApi.md#uploadcustomemoji) | **Post** /realm/emoji/{emoji_name} | 
 *StreamsApi* | [**CreateBigBlueButtonVideoCall**](docs/StreamsApi.md#createbigbluebuttonvideocall) | **Get** /calls/bigbluebutton/create | 
 *StreamsApi* | [**DeleteStream**](docs/StreamsApi.md#deletestream) | **Delete** /streams/{stream_id} | 
@@ -87,31 +90,73 @@ Class | Method | HTTP request | Description
 *UsersApi* | [**GetUserPresence**](docs/UsersApi.md#getuserpresence) | **Get** /users/{email}/presence | 
 *UsersApi* | [**GetUsers**](docs/UsersApi.md#getusers) | **Get** /users | 
 *UsersApi* | [**ReactivateUser**](docs/UsersApi.md#reactivateuser) | **Post** /users/{user_id}/reactivate | 
-*UsersApi* | [**RemoveUserGroup**](docs/UsersApi.md#removeusergroup) | **Delete** /user_groups/{group_id} | 
+*UsersApi* | [**RemoveUserGroup**](docs/UsersApi.md#removeusergroup) | **Delete** /user_groups/{user_group_id} | 
 *UsersApi* | [**SetTypingStatus**](docs/UsersApi.md#settypingstatus) | **Post** /typing | 
 *UsersApi* | [**UpdateNotificationSettings**](docs/UsersApi.md#updatenotificationsettings) | **Patch** /settings/notifications | 
 *UsersApi* | [**UpdateUser**](docs/UsersApi.md#updateuser) | **Patch** /users/{user_id} | 
-*UsersApi* | [**UpdateUserGroup**](docs/UsersApi.md#updateusergroup) | **Patch** /user_groups/{group_id} | 
+*UsersApi* | [**UpdateUserGroup**](docs/UsersApi.md#updateusergroup) | **Patch** /user_groups/{user_group_id} | 
+*UsersApi* | [**UpdateUserGroupMembers**](docs/UsersApi.md#updateusergroupmembers) | **Post** /user_groups/{user_group_id}/members | 
 *WebhooksApi* | [**ZulipOutgoingWebhooks**](docs/WebhooksApi.md#zulipoutgoingwebhooks) | **Post** /zulip-outgoing-webhook | 
 
 
 ## Documentation For Models
 
  - [AddSubscriptionsResponse](docs/AddSubscriptionsResponse.md)
+ - [AddSubscriptionsResponseAllOf](docs/AddSubscriptionsResponseAllOf.md)
  - [ApiKeyResponse](docs/ApiKeyResponse.md)
+ - [ApiKeyResponseAllOf](docs/ApiKeyResponseAllOf.md)
+ - [Attachments](docs/Attachments.md)
+ - [AttachmentsMessages](docs/AttachmentsMessages.md)
  - [BadEventQueueIdError](docs/BadEventQueueIdError.md)
+ - [BadEventQueueIdErrorAllOf](docs/BadEventQueueIdErrorAllOf.md)
+ - [BasicBot](docs/BasicBot.md)
+ - [BasicBotAllOf](docs/BasicBotAllOf.md)
+ - [BasicBotBase](docs/BasicBotBase.md)
+ - [BasicStream](docs/BasicStream.md)
+ - [BasicStreamAllOf](docs/BasicStreamAllOf.md)
+ - [BasicStreamBase](docs/BasicStreamBase.md)
+ - [Bot](docs/Bot.md)
+ - [BotAllOf](docs/BotAllOf.md)
  - [CodedError](docs/CodedError.md)
+ - [CodedErrorAllOf](docs/CodedErrorAllOf.md)
+ - [CodedErrorBase](docs/CodedErrorBase.md)
+ - [CustomProfileField](docs/CustomProfileField.md)
+ - [DefaultStreamGroup](docs/DefaultStreamGroup.md)
+ - [EmojiReaction](docs/EmojiReaction.md)
+ - [EmojiReactionAllOf](docs/EmojiReactionAllOf.md)
+ - [EmojiReactionBase](docs/EmojiReactionBase.md)
+ - [EmojiReactionBaseUser](docs/EmojiReactionBaseUser.md)
+ - [GetMessages](docs/GetMessages.md)
+ - [GetMessagesAllOf](docs/GetMessagesAllOf.md)
+ - [Hotspot](docs/Hotspot.md)
+ - [InlineObject](docs/InlineObject.md)
+ - [InlineObject1](docs/InlineObject1.md)
+ - [InlineResponse200](docs/InlineResponse200.md)
  - [InvalidApiKeyError](docs/InvalidApiKeyError.md)
  - [InvalidMessageError](docs/InvalidMessageError.md)
+ - [InvalidMessageErrorAllOf](docs/InvalidMessageErrorAllOf.md)
  - [JsonError](docs/JsonError.md)
- - [JsonResponse](docs/JsonResponse.md)
+ - [JsonErrorBase](docs/JsonErrorBase.md)
+ - [JsonResponseBase](docs/JsonResponseBase.md)
  - [JsonSuccess](docs/JsonSuccess.md)
+ - [JsonSuccessAllOf](docs/JsonSuccessAllOf.md)
+ - [JsonSuccessBase](docs/JsonSuccessBase.md)
  - [Messages](docs/Messages.md)
- - [MessagesReactions](docs/MessagesReactions.md)
- - [MessagesUser](docs/MessagesUser.md)
+ - [MessagesAllOf](docs/MessagesAllOf.md)
+ - [MessagesBase](docs/MessagesBase.md)
  - [MissingArgumentError](docs/MissingArgumentError.md)
+ - [MissingArgumentErrorAllOf](docs/MissingArgumentErrorAllOf.md)
  - [NonExistingStreamError](docs/NonExistingStreamError.md)
+ - [NonExistingStreamErrorAllOf](docs/NonExistingStreamErrorAllOf.md)
+ - [Presence](docs/Presence.md)
+ - [RealmDomain](docs/RealmDomain.md)
+ - [RealmEmoji](docs/RealmEmoji.md)
+ - [RealmExport](docs/RealmExport.md)
+ - [Subscriptions](docs/Subscriptions.md)
  - [User](docs/User.md)
+ - [UserAllOf](docs/UserAllOf.md)
+ - [UserBase](docs/UserBase.md)
+ - [UserGroup](docs/UserGroup.md)
  - [UserNotAuthorizedError](docs/UserNotAuthorizedError.md)
 
 

@@ -4,7 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Result** | **string** |  | 
+**Result** | [**map[string]interface{}**](map[string]interface{}.md) |  | 
+**Msg** | [**map[string]interface{}**](map[string]interface{}.md) |  | 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

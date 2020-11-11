@@ -10,5 +10,6 @@
 package openapi
 // JsonError struct for JsonError
 type JsonError struct {
-	Result string `json:"result"`
+	Result map[string]interface{} `json:"result"`
+	Msg map[string]interface{} `json:"msg"`
 }

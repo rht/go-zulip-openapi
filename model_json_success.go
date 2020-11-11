@@ -10,5 +10,6 @@
 package openapi
 // JsonSuccess struct for JsonSuccess
 type JsonSuccess struct {
-	Result string `json:"result"`
+	Result map[string]interface{} `json:"result"`
+	Msg map[string]interface{} `json:"msg"`
 }

@@ -10,6 +10,6 @@
 package openapi
 // InvalidApiKeyError struct for InvalidApiKeyError
 type InvalidApiKeyError struct {
-	Result string `json:"result"`
-	Msg string `json:"msg"`
+	Result map[string]interface{} `json:"result"`
+	Msg map[string]interface{} `json:"msg"`
 }

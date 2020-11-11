@@ -10,10 +10,9 @@
 package openapi
 // MissingArgumentError struct for MissingArgumentError
 type MissingArgumentError struct {
-	Result string `json:"result"`
-	Msg string `json:"msg"`
-	// A string that identifies the error. 
-	Code string `json:"code,omitempty"`
+	Result map[string]interface{} `json:"result"`
+	Msg map[string]interface{} `json:"msg"`
+	Code map[string]interface{} `json:"code,omitempty"`
 	// It contains the information about the missing parameter. 
 	VarName string `json:"var_name,omitempty"`
 }

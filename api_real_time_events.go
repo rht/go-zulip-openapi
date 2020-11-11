@@ -136,16 +136,16 @@ GetEvents Method for GetEvents
  * @param optional nil or *GetEventsOpts - Optional Parameters:
  * @param "LastEventId" (optional.Int32) -  The highest event ID in this queue that you've received and wish to acknowledge. See the [code for `call_on_each_event`](https://github.com/zulip/python-zulip-api/blob/master/zulip/zulip/__init__.py) in the [zulip Python module](https://github.com/zulip/python-zulip-api) for an example implementation of correctly processing each event exactly once. 
  * @param "DontBlock" (optional.Bool) -  Set to `true` if the client is requesting a nonblocking reply. If not specified, the request will block until either a new event is available or a few minutes have passed, in which case the server will send the client a heartbeat event. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *RealTimeEventsApiService) GetEvents(ctx _context.Context, queueId string, localVarOptionals *GetEventsOpts) (JsonSuccess, *_nethttp.Response, error) {
+func (a *RealTimeEventsApiService) GetEvents(ctx _context.Context, queueId string, localVarOptionals *GetEventsOpts) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -200,7 +200,7 @@ func (a *RealTimeEventsApiService) GetEvents(ctx _context.Context, queueId strin
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -355,16 +355,16 @@ This powerful endpoint can be used to register a Zulip \&quot;event queue\&quot;
  * @param "ClientCapabilities" (optional.Interface of map[string]interface{}) -  Dictionary containing details on features the client supports that are relevant to the format of responses sent by the server.  * `notification_settings_null`: Boolean for whether the   client can handle the current API with null values for   stream-level notification settings (which means the stream   is not customized and should inherit the user's global   notification settings for stream messages).  New in Zulip   2.1.0; in earlier Zulip releases, stream-level   notification settings were simple booleans.  * `bulk_message_deletion`: Boolean for whether the client's    handler for the `delete_message` event type has been    updated to process the new bulk format (with a    `message_ids`, rather than a singleton `message_id`).    Otherwise, the server will send `delete_message` events    in a loop.  New in Zulip 3.0 (feature level 13).  This    capability is for backwards-compatibility; it will be    required in a future server release.  * `user_avatar_url_field_optional`: Boolean for whether the    client required avatar URLs for all users, or supports    using `GET /avatar/{user_id}` to access user avatars.  If the    client has this capability, the server may skip sending a    `avatar_url` field in the `realm_user` at its sole discretion    to optimize network performance.  This is an important optimization    in organizations with 10,000s of users.    New in Zulip 3.0 (feature level 18). 
  * @param "FetchEventTypes" (optional.Interface of []string) -  Same as the `event_types` parameter except that the values in `fetch_event_types` are used to fetch initial data. If `fetch_event_types` is not provided, `event_types` is used and if `event_types` is not provided, this parameter defaults to `None`. 
  * @param "Narrow" (optional.Interface of [][]string) -  A JSON-encoded array of arrays of length 2 indicating the narrow for which you'd like to receive events for. For instance, to receive events for the stream `Denmark`, you would specify `narrow=[['stream', 'Denmark']]`.  Another example is `narrow=[['is', 'private']]` for private messages. Default is `[]`. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *RealTimeEventsApiService) RegisterQueue(ctx _context.Context, localVarOptionals *RegisterQueueOpts) (JsonSuccess, *_nethttp.Response, error) {
+func (a *RealTimeEventsApiService) RegisterQueue(ctx _context.Context, localVarOptionals *RegisterQueueOpts) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -463,7 +463,7 @@ func (a *RealTimeEventsApiService) RegisterQueue(ctx _context.Context, localVarO
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -545,7 +545,7 @@ func (a *RealTimeEventsApiService) RestErrorHandling(ctx _context.Context) (*_ne
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 400 {
-			var v OneOfobjectobjectobject
+			var v OneOfInvalidApiKeyErrorMissingArgumentErrorUserNotAuthorizedError
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()

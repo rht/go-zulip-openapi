@@ -15,17 +15,18 @@ Method | HTTP request | Description
 [**GetUserPresence**](UsersApi.md#GetUserPresence) | **Get** /users/{email}/presence | 
 [**GetUsers**](UsersApi.md#GetUsers) | **Get** /users | 
 [**ReactivateUser**](UsersApi.md#ReactivateUser) | **Post** /users/{user_id}/reactivate | 
-[**RemoveUserGroup**](UsersApi.md#RemoveUserGroup) | **Delete** /user_groups/{group_id} | 
+[**RemoveUserGroup**](UsersApi.md#RemoveUserGroup) | **Delete** /user_groups/{user_group_id} | 
 [**SetTypingStatus**](UsersApi.md#SetTypingStatus) | **Post** /typing | 
 [**UpdateNotificationSettings**](UsersApi.md#UpdateNotificationSettings) | **Patch** /settings/notifications | 
 [**UpdateUser**](UsersApi.md#UpdateUser) | **Patch** /users/{user_id} | 
-[**UpdateUserGroup**](UsersApi.md#UpdateUserGroup) | **Patch** /user_groups/{group_id} | 
+[**UpdateUserGroup**](UsersApi.md#UpdateUserGroup) | **Patch** /user_groups/{user_group_id} | 
+[**UpdateUserGroupMembers**](UsersApi.md#UpdateUserGroupMembers) | **Post** /user_groups/{user_group_id}/members | 
 
 
 
 ## CreateUser
 
-> JsonSuccess CreateUser(ctx, email, password, fullName, shortName)
+> JsonSuccessBase CreateUser(ctx, email, password, fullName)
 
 
 
@@ -40,11 +41,10 @@ Name | Type | Description  | Notes
 **email** | **string**| The email address of the new user.  | 
 **password** | **string**| The password of the new user.  | 
 **fullName** | **string**| The full name of the new user.  | 
-**shortName** | **string**| The short name of the new user.  Not user-visible.  | 
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -162,7 +162,7 @@ No authorization required
 
 ## GetAttachments
 
-> JsonSuccess GetAttachments(ctx, )
+> JsonSuccessBase GetAttachments(ctx, )
 
 
 
@@ -174,7 +174,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -192,7 +192,7 @@ No authorization required
 
 ## GetOwnUser
 
-> JsonSuccess GetOwnUser(ctx, )
+> JsonSuccessBase GetOwnUser(ctx, )
 
 
 
@@ -204,7 +204,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -222,7 +222,7 @@ No authorization required
 
 ## GetUser
 
-> JsonSuccess GetUser(ctx, userId, optional)
+> JsonSuccessBase GetUser(ctx, userId, optional)
 
 
 
@@ -250,7 +250,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -268,7 +268,7 @@ No authorization required
 
 ## GetUserGroups
 
-> JsonSuccess GetUserGroups(ctx, )
+> JsonSuccessBase GetUserGroups(ctx, )
 
 
 
@@ -280,7 +280,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -298,7 +298,7 @@ No authorization required
 
 ## GetUserPresence
 
-> JsonSuccess GetUserPresence(ctx, email)
+> JsonSuccessBase GetUserPresence(ctx, email)
 
 
 
@@ -314,7 +314,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -332,7 +332,7 @@ No authorization required
 
 ## GetUsers
 
-> JsonSuccess GetUsers(ctx, optional)
+> JsonSuccessBase GetUsers(ctx, optional)
 
 
 
@@ -358,7 +358,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -410,11 +410,11 @@ No authorization required
 
 ## RemoveUserGroup
 
-> JsonSuccess RemoveUserGroup(ctx, groupId)
+> JsonSuccess RemoveUserGroup(ctx, userGroupId)
 
 
 
-Delete a [user group](/help/user-groups).  `DELETE {{ api_url }}/v1/user_groups/{group_id}` 
+Delete a [user group](/help/user-groups).  `DELETE {{ api_url }}/v1/user_groups/{user_group_id}` 
 
 ### Required Parameters
 
@@ -422,7 +422,7 @@ Delete a [user group](/help/user-groups).  `DELETE {{ api_url }}/v1/user_groups/
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**groupId** | **int32**| The ID of the target user group.  | 
+**userGroupId** | **int32**| The ID of the target user group.  | 
 
 ### Return type
 
@@ -448,7 +448,7 @@ No authorization required
 
 
 
-Send an event indicating that the user has started or stopped typing on their client.  See [the typing notification docs](https://zulip.readthedocs.io/en/latest/subsystems/typing-indicators.html) for details on Zulip's typing notifications protocol.  `POST {{ api_url }}/v1/typing` 
+Notify other users whether the current user is typing a message.  `POST {{ api_url }}/v1/typing`  Clients implementing Zulip's typing notifications protocol should work as follows:  * Send a request to this endpoint with `op=\"start\"` when a user starts typing   a private message or group private message, and also every   `TYPING_STARTED_WAIT_PERIOD=10` seconds that the user continues to actively type   or otherwise interact with the compose UI (E.g. interacting with the compose box   emoji picker). * Send a request to this endpoint with `op=\"stop\"` when a user pauses using the   compose UI for at least `TYPING_STOPPED_WAIT_PERIOD=5` seconds or cancels   the compose action (if it had previously sent a \"start\" operation for that   compose action). * Start displaying \"Sender is typing\" for a given conversation when the client   receives an `op=\"start\"` event from the [events API](/api/get-events). * Continue displaying \"Sender is typing\" until they receive an `op=\"stop\"` event   from the [events API](/api/get-events) or `TYPING_STARTED_EXPIRY_PERIOD=15`   seconds have passed without a new `op=\"start\"` event for that conversation.  This protocol is designed to allow the server-side typing notifications implementation to be stateless while being resilient; network failures cannot result in a user being incorrectly displayed as perpetually typing.  See [the typing notification docs](https://zulip.readthedocs.io/en/latest/subsystems/typing-indicators.html) for additional design details on Zulip's typing notifications protocol. 
 
 ### Required Parameters
 
@@ -457,7 +457,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
 **op** | **string**| Whether the user has started (&#x60;start&#x60;) or stopped (&#x60;stop&#x60;) to type.  | 
-**to** | [**[]int32**](int32.md)| The user_ids of the recipients of the message being typed. Typing notifications are only supported for private messages. Send a JSON-encoded list of user_ids. (Use a list even if there is only one recipient.).  **Changes**: Before Zulip 2.0, this parameter accepted only a JSON-encoded list of email addresses.  Support for the email address-based format was removed in Zulip 3.0 (feature level 11).  | 
+**to** | [**[]int32**](int32.md)| The user_ids of the recipients of the message being typed. Typing notifications are only supported for private messages. Send a JSON-encoded list of user_ids. (Use a list even if there is only one recipient.)  **Changes**: Before Zulip 2.0, this parameter accepted only a JSON-encoded list of email addresses.  Support for the email address-based format was removed in Zulip 3.0 (feature level 11).  | 
 
 ### Return type
 
@@ -479,7 +479,7 @@ No authorization required
 
 ## UpdateNotificationSettings
 
-> JsonSuccess UpdateNotificationSettings(ctx, optional)
+> JsonSuccessBase UpdateNotificationSettings(ctx, optional)
 
 
 
@@ -521,7 +521,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**JsonSuccess**](JsonSuccess.md)
+[**JsonSuccessBase**](JsonSuccessBase.md)
 
 ### Authorization
 
@@ -586,11 +586,11 @@ No authorization required
 
 ## UpdateUserGroup
 
-> JsonSuccess UpdateUserGroup(ctx, groupId, name, description)
+> JsonSuccess UpdateUserGroup(ctx, userGroupId, name, description)
 
 
 
-Update the name or description of a [user group](/help/user-groups).  `PATCH {{ api_url }}/v1/user_groups/{group_id}` 
+Update the name or description of a [user group](/help/user-groups).  `PATCH {{ api_url }}/v1/user_groups/{user_group_id}` 
 
 ### Required Parameters
 
@@ -598,9 +598,55 @@ Update the name or description of a [user group](/help/user-groups).  `PATCH {{ 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**groupId** | **int32**| The ID of the target user group.  | 
+**userGroupId** | **int32**| The ID of the target user group.  | 
 **name** | **string**| The new name of the group.  | 
 **description** | **string**| The new description of the group.  | 
+
+### Return type
+
+[**JsonSuccess**](JsonSuccess.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## UpdateUserGroupMembers
+
+> JsonSuccess UpdateUserGroupMembers(ctx, userGroupId, optional)
+
+
+
+Update the members of a [user group](/help/user-groups).  `POST {{ api_url }}/v1/user_groups/{user_group_id}/members` 
+
+### Required Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**userGroupId** | **int32**| The ID of the target user group.  | 
+ **optional** | ***UpdateUserGroupMembersOpts** | optional parameters | nil if no parameters
+
+### Optional Parameters
+
+Optional parameters are passed through a pointer to a UpdateUserGroupMembersOpts struct
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **delete** | [**optional.Interface of []int32**](int32.md)| The list of user ids to be removed from the user group.  | 
+ **add** | [**optional.Interface of []int32**](int32.md)| The list of user ids to be added to the user group.  | 
 
 ### Return type
 

@@ -10,10 +10,9 @@
 package openapi
 // NonExistingStreamError struct for NonExistingStreamError
 type NonExistingStreamError struct {
-	Result string `json:"result"`
-	Msg string `json:"msg"`
-	// A string that identifies the error. 
-	Code string `json:"code,omitempty"`
+	Result map[string]interface{} `json:"result"`
+	Msg map[string]interface{} `json:"msg"`
+	Code map[string]interface{} `json:"code,omitempty"`
 	// The name of the stream that could not be found. 
 	Stream string `json:"stream,omitempty"`
 }

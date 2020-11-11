@@ -29,18 +29,18 @@ type StreamsApiService service
 
 /*
 CreateBigBlueButtonVideoCall Method for CreateBigBlueButtonVideoCall
-Create a video call url for a Big Blue Button video call. Requires Big Blue Button to be configured on the Zulip server. 
+Create a video call URL for a Big Blue Button video call. Requires Big Blue Button to be configured on the Zulip server. 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *StreamsApiService) CreateBigBlueButtonVideoCall(ctx _context.Context) (JsonSuccess, *_nethttp.Response, error) {
+func (a *StreamsApiService) CreateBigBlueButtonVideoCall(ctx _context.Context) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -88,7 +88,7 @@ func (a *StreamsApiService) CreateBigBlueButtonVideoCall(ctx _context.Context) (
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -208,27 +208,21 @@ func (a *StreamsApiService) DeleteStream(ctx _context.Context, streamId int32) (
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-// GetStreamIdOpts Optional parameters for the method 'GetStreamId'
-type GetStreamIdOpts struct {
-    Stream optional.String
-}
-
 /*
 GetStreamId Method for GetStreamId
 Get the unique ID of a given stream.  &#x60;GET {{ api_url }}/v1/get_stream_id&#x60; 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param optional nil or *GetStreamIdOpts - Optional Parameters:
- * @param "Stream" (optional.String) -  The name of the stream to access. 
-@return JsonSuccess
+ * @param stream The name of the stream to access. 
+@return JsonSuccessBase
 */
-func (a *StreamsApiService) GetStreamId(ctx _context.Context, localVarOptionals *GetStreamIdOpts) (JsonSuccess, *_nethttp.Response, error) {
+func (a *StreamsApiService) GetStreamId(ctx _context.Context, stream string) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -237,9 +231,7 @@ func (a *StreamsApiService) GetStreamId(ctx _context.Context, localVarOptionals 
 	localVarQueryParams := _neturl.Values{}
 	localVarFormParams := _neturl.Values{}
 
-	if localVarOptionals != nil && localVarOptionals.Stream.IsSet() {
-		localVarQueryParams.Add("stream", parameterToString(localVarOptionals.Stream.Value(), ""))
-	}
+	localVarQueryParams.Add("stream", parameterToString(stream, ""))
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}
 
@@ -279,7 +271,7 @@ func (a *StreamsApiService) GetStreamId(ctx _context.Context, localVarOptionals 
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -317,16 +309,16 @@ GetStreamTopics Method for GetStreamTopics
 Get all the topics in a specific stream  &#x60;GET {{ api_url }}/v1/users/me/{stream_id}/topics&#x60; 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param streamId The ID of the stream to access. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *StreamsApiService) GetStreamTopics(ctx _context.Context, streamId int32) (JsonSuccess, *_nethttp.Response, error) {
+func (a *StreamsApiService) GetStreamTopics(ctx _context.Context, streamId int32) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -376,7 +368,7 @@ func (a *StreamsApiService) GetStreamTopics(ctx _context.Context, streamId int32
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -412,6 +404,7 @@ func (a *StreamsApiService) GetStreamTopics(ctx _context.Context, streamId int32
 // GetStreamsOpts Optional parameters for the method 'GetStreams'
 type GetStreamsOpts struct {
     IncludePublic optional.Bool
+    IncludeWebPublic optional.Bool
     IncludeSubscribed optional.Bool
     IncludeAllActive optional.Bool
     IncludeDefault optional.Bool
@@ -424,20 +417,21 @@ Get all streams that the user has access to.  &#x60;GET {{ api_url }}/v1/streams
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param optional nil or *GetStreamsOpts - Optional Parameters:
  * @param "IncludePublic" (optional.Bool) -  Include all public streams. 
+ * @param "IncludeWebPublic" (optional.Bool) -  Include all web public streams. 
  * @param "IncludeSubscribed" (optional.Bool) -  Include all streams that the user is subscribed to. 
  * @param "IncludeAllActive" (optional.Bool) -  Include all active streams. The user must have administrative privileges to use this parameter. 
  * @param "IncludeDefault" (optional.Bool) -  Include all default streams for the user's realm. 
  * @param "IncludeOwnerSubscribed" (optional.Bool) -  If the user is a bot, include all streams that the bot's owner is subscribed to. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *StreamsApiService) GetStreams(ctx _context.Context, localVarOptionals *GetStreamsOpts) (JsonSuccess, *_nethttp.Response, error) {
+func (a *StreamsApiService) GetStreams(ctx _context.Context, localVarOptionals *GetStreamsOpts) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -448,6 +442,9 @@ func (a *StreamsApiService) GetStreams(ctx _context.Context, localVarOptionals *
 
 	if localVarOptionals != nil && localVarOptionals.IncludePublic.IsSet() {
 		localVarQueryParams.Add("include_public", parameterToString(localVarOptionals.IncludePublic.Value(), ""))
+	}
+	if localVarOptionals != nil && localVarOptionals.IncludeWebPublic.IsSet() {
+		localVarQueryParams.Add("include_web_public", parameterToString(localVarOptionals.IncludeWebPublic.Value(), ""))
 	}
 	if localVarOptionals != nil && localVarOptionals.IncludeSubscribed.IsSet() {
 		localVarQueryParams.Add("include_subscribed", parameterToString(localVarOptionals.IncludeSubscribed.Value(), ""))
@@ -500,7 +497,7 @@ func (a *StreamsApiService) GetStreams(ctx _context.Context, localVarOptionals *
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -539,16 +536,16 @@ Check whether a user is subscribed to a stream.  &#x60;GET {{ api_url }}/v1/user
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param userId The target user's ID. 
  * @param streamId The ID of the stream to access. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *StreamsApiService) GetSubscriptionStatus(ctx _context.Context, userId int32, streamId int32) (JsonSuccess, *_nethttp.Response, error) {
+func (a *StreamsApiService) GetSubscriptionStatus(ctx _context.Context, userId int32, streamId int32) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -600,7 +597,7 @@ func (a *StreamsApiService) GetSubscriptionStatus(ctx _context.Context, userId i
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -634,16 +631,16 @@ Get all streams that the user is subscribed to.  &#x60;GET {{ api_url }}/v1/user
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param optional nil or *GetSubscriptionsOpts - Optional Parameters:
  * @param "IncludeSubscribers" (optional.Bool) -  Whether each returned stream object should include a `subscribers` field containing a list of the user IDs of its subscribers.  (This may be significantly slower in organizations with thousands of users subscribed to many streams.)  **Changes**: New in Zulip 2.1.0. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *StreamsApiService) GetSubscriptions(ctx _context.Context, localVarOptionals *GetSubscriptionsOpts) (JsonSuccess, *_nethttp.Response, error) {
+func (a *StreamsApiService) GetSubscriptions(ctx _context.Context, localVarOptionals *GetSubscriptionsOpts) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -694,7 +691,7 @@ func (a *StreamsApiService) GetSubscriptions(ctx _context.Context, localVarOptio
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -845,9 +842,9 @@ type SubscribeOpts struct {
 Subscribe Method for Subscribe
 Subscribe one or more users to one or more streams.  &#x60;POST {{ api_url }}/v1/users/me/subscriptions&#x60;  If any of the specified streams do not exist, they are automatically created.  The initial [stream settings](/api/update-stream) will be determined by the optional parameters like &#x60;invite_only&#x60; detailed below. 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param subscriptions A list of dictionaries containing the the key `name` and value specifying the name of the stream to subscribe. If the stream does not exist a new stream is created. The description of the stream created can be specified by setting the dictionary key `description` with an appropriate value. 
+ * @param subscriptions A list of dictionaries containing the key `name` and value specifying the name of the stream to subscribe. If the stream does not exist a new stream is created. The description of the stream created can be specified by setting the dictionary key `description` with an appropriate value. 
  * @param optional nil or *SubscribeOpts - Optional Parameters:
- * @param "Principals" (optional.Interface of []OneOfstringinteger) -  A list of user ids (preferred) or Zulip display email addresses of the users to be subscribed to or unsubscribed from the streams specified in the `subscriptions` parameter. If not provided, then the requesting user/bot is subscribed.  **Changes**: The integer format is new in Zulip 3.0 (Feature level 9). 
+ * @param "Principals" (optional.Interface of []OneOfstringinteger) -  A list of user ids (preferred) or Zulip display email addresses of the users to be subscribed to or unsubscribed from the streams specified in the `subscriptions` parameter. If not provided, then the requesting user/bot is subscribed.  **Changes**: The integer format is new in Zulip 3.0 (feature level 9). 
  * @param "AuthorizationErrorsFatal" (optional.Bool) -  A boolean specifying whether authorization errors (such as when the requesting user is not authorized to access a private stream) should be considered fatal or not. When `True`, an authorization error is reported as such. When set to `False`, the response will be a 200 and any streams where the request encountered an authorization error will be listed in the `unauthorized` key. 
  * @param "Announce" (optional.Bool) -  If one of the streams specified did not exist previously and is thus craeted by this call, this determines whether [notification bot](/help/configure-notification-bot) will send an announcement about the new stream's creation. 
  * @param "InviteOnly" (optional.Bool) -  As described above, this endpoint will create a new stream if passed a stream name that doesn't already exist.  This parameters and the ones that follow are used to request an initial configuration of a created stream; they are ignored for streams that already exist.  This parameter determines whether any newly created streams will be private streams. 
@@ -995,17 +992,17 @@ Unsubscribe yourself or other users from one or more streams.  &#x60;DELETE {{ a
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param subscriptions A list of stream names to unsubscribe from. This parameter is called `streams` in our Python API. 
  * @param optional nil or *UnsubscribeOpts - Optional Parameters:
- * @param "Principals" (optional.Interface of []OneOfstringinteger) -  A list of user ids (preferred) or Zulip display email addresses of the users to be subscribed to or unsubscribed from the streams specified in the `subscriptions` parameter. If not provided, then the requesting user/bot is subscribed.  **Changes**: The integer format is new in Zulip 3.0 (Feature level 9). 
-@return JsonSuccess
+ * @param "Principals" (optional.Interface of []OneOfstringinteger) -  A list of user ids (preferred) or Zulip display email addresses of the users to be subscribed to or unsubscribed from the streams specified in the `subscriptions` parameter. If not provided, then the requesting user/bot is subscribed.  **Changes**: The integer format is new in Zulip 3.0 (feature level 9). 
+@return JsonSuccessBase
 */
-func (a *StreamsApiService) Unsubscribe(ctx _context.Context, subscriptions []string, localVarOptionals *UnsubscribeOpts) (JsonSuccess, *_nethttp.Response, error) {
+func (a *StreamsApiService) Unsubscribe(ctx _context.Context, subscriptions []string, localVarOptionals *UnsubscribeOpts) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodDelete
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -1075,7 +1072,7 @@ func (a *StreamsApiService) Unsubscribe(ctx _context.Context, subscriptions []st
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -1250,16 +1247,16 @@ UpdateSubscriptionSettings Method for UpdateSubscriptionSettings
 This endpoint is used to update the user&#39;s personal settings for the streams they are subscribed to, including muting, color, pinning, and per-stream notification settings.  &#x60;POST {{ api_url }}/v1/users/me/subscriptions/properties&#x60; 
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param subscriptionData A list of objects that describe the changes that should be applied in each subscription. Each object represents a subscription, and must have a `stream_id` key that identifies the stream, as well as the `property` being modified and its new `value`. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *StreamsApiService) UpdateSubscriptionSettings(ctx _context.Context, subscriptionData []map[string]interface{}) (JsonSuccess, *_nethttp.Response, error) {
+func (a *StreamsApiService) UpdateSubscriptionSettings(ctx _context.Context, subscriptionData []map[string]interface{}) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -1318,7 +1315,7 @@ func (a *StreamsApiService) UpdateSubscriptionSettings(ctx _context.Context, sub
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -1354,16 +1351,16 @@ Update which streams you are are subscribed to.
  * @param optional nil or *UpdateSubscriptionsOpts - Optional Parameters:
  * @param "Delete" (optional.Interface of []string) -  A list of stream names to unsubscribe from. 
  * @param "Add" (optional.Interface of []map[string]interface{}) -  A list of objects describing which streams to subscribe to, optionally including per-user subscription parameters (e.g. color) and if the stream is to be created, its description. 
-@return JsonSuccess
+@return JsonSuccessBase
 */
-func (a *StreamsApiService) UpdateSubscriptions(ctx _context.Context, localVarOptionals *UpdateSubscriptionsOpts) (JsonSuccess, *_nethttp.Response, error) {
+func (a *StreamsApiService) UpdateSubscriptions(ctx _context.Context, localVarOptionals *UpdateSubscriptionsOpts) (JsonSuccessBase, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPatch
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  JsonSuccess
+		localVarReturnValue  JsonSuccessBase
 	)
 
 	// create path and map variables
@@ -1433,7 +1430,7 @@ func (a *StreamsApiService) UpdateSubscriptions(ctx _context.Context, localVarOp
 			error: localVarHTTPResponse.Status,
 		}
 		if localVarHTTPResponse.StatusCode == 200 {
-			var v JsonSuccess
+			var v JsonSuccessBase
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()

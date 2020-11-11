@@ -10,8 +10,8 @@
 package openapi
 // AddSubscriptionsResponse struct for AddSubscriptionsResponse
 type AddSubscriptionsResponse struct {
-	Result string `json:"result"`
-	Msg string `json:"msg"`
+	Result map[string]interface{} `json:"result"`
+	Msg map[string]interface{} `json:"msg"`
 	// A dictionary where the key is the email address of the user/bot and the value is a list of the names of the streams that were subscribed to as a result of the query. 
 	Subscribed map[string][]string `json:"subscribed,omitempty"`
 	// A dictionary where the key is the email address of the user/bot and the value is a list of the names of the streams that the user/bot is already subscribed to. 
